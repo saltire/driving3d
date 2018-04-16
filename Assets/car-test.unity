@@ -2564,9 +2564,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: dd150f663fdfb6b4baea14cba537828a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  referenceOrthographicSize: 640
-  referencePixelsPerUnit: 64
-  overrides: []
+  unitHeight: 9
+  pixelHeight: 360
 --- !u!1001 &1364435736
 Prefab:
   m_ObjectHideFlags: 0

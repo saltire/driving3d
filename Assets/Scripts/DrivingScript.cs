@@ -49,7 +49,7 @@ public class DrivingScript : MonoBehaviour {
 
 	GameObject addWheel(float xoff, float yoff, bool powered, bool rotatable) {
 		GameObject wheel = (GameObject)Instantiate(Wheel,
-			transform.position + (transform.rotation * new Vector3(xoff / ppu, yoff / ppu, 0.1f)),
+			transform.position + (transform.rotation * new Vector3(xoff / ppu, yoff / ppu, 0)),
 			transform.rotation, transform);
 
 		WheelScript scr = wheel.GetComponent<WheelScript>();
