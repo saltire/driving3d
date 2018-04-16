@@ -10,11 +10,10 @@ public class CameraFollowScript : MonoBehaviour {
 
 	void Start() {
 		distance = Vector3.back * 10;
-		transform.position = transform.position + distance;
+		transform.position = target.position + distance;
 	}
 
 	void FixedUpdate() {
-		transform.position = Vector3.Lerp(transform.position, target.position + distance,
-			speed);
+		transform.position = Vector3.Lerp(transform.position, target.position + distance, speed);
 	}
 }

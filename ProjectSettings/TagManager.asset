@@ -13,8 +13,8 @@ TagManager:
   - UI
   - 
   - 
-  - 
-  - 
+  - Buildings
+  - Tiles
   - 
   - 
   - 
@@ -38,6 +38,12 @@ TagManager:
   - 
   - 
   m_SortingLayers:
+  - name: Tiles
+    uniqueID: 1043045511
+    locked: 0
   - name: Default
     uniqueID: 0
+    locked: 0
+  - name: Cars
+    uniqueID: 458133541
     locked: 0
