@@ -3,7 +3,8 @@ using System.Collections.Generic;
 using UnityEngine;
 
 public class DrivingScript : MonoBehaviour {
-	public GameObject Wheel;
+	public bool playerControlled = false;
+	public bool frontWheelDrive = false;
 
 	// Edit these values to customize car
 	public float maxSpeed = 12;          // maximum speed car can attain
@@ -20,17 +21,16 @@ public class DrivingScript : MonoBehaviour {
 	public float wheelAngleVelocity = 5; // how quickly a wheel rotates in degrees per frame
 	public float wheelMotorSpeed = 100;
 
-	// *note: torque can be set to 0, and car will still turn!
-	// also angular damping(box2d) greatly affects the turning capacity of the car.
-	// public float torqueAcc = 6;          // extra torque on the car when turning
-	// public float torqueRev = 8;          // extra torque on the car in reverse
-	public float torqueDamp = 0.1f;      // how quickly the car will straighten when not turning
+	// public float steerTorque = 6;        // extra torque on the car when turning
+	public float torqueDamp = 0.75f;     // how quickly the car will straighten when not turning
 																	     // range: (0-1)
 
-	public float drift = 0.5f;           // drift control, usually between (0-1) but can be higher
+	public float driftControl = 0.5f;    // drift control, usually between (0-1) but can be higher
 																	     // 0: no control | 1: high control
 
 	public float ppu = 64;							 // pixels per unit
+
+	public GameObject Wheel;
 
 	Rigidbody2D body;
 	GameObject[] wheels;
@@ -38,10 +38,10 @@ public class DrivingScript : MonoBehaviour {
 
 	void Start() {
 		wheels = new GameObject[] {
-			addWheel(-wheelXoff, wheelYoff, true, true),
-			addWheel(wheelXoff, wheelYoff, true, true),
-			addWheel(-wheelXoff, -wheelYoff, false, false),
-			addWheel(wheelXoff, -wheelYoff, false, false),
+			addWheel(-wheelXoff, wheelYoff, frontWheelDrive, true),
+			addWheel(wheelXoff, wheelYoff, frontWheelDrive, true),
+			addWheel(-wheelXoff, -wheelYoff, !frontWheelDrive, false),
+			addWheel(wheelXoff, -wheelYoff, !frontWheelDrive, false),
 		};
 
 		body = GetComponent<Rigidbody2D>();
@@ -72,24 +72,28 @@ public class DrivingScript : MonoBehaviour {
 	}
 
 	void FixedUpdate() {
-		float acc = Input.GetAxisRaw("Vertical"); // up: -1, down: 1
-		float steer = Input.GetAxisRaw("Horizontal"); // left: -1, right: 1
+		float acc = 0;
+		float steer = 0;
 
-		float phySpeed = body.velocity.magnitude;
-		// true if the car is moving forward, false when moving backwards
-		bool movingForward = Vector2.Dot(body.velocity, transform.forward) > 0;
+		if (playerControlled) {
+			acc = Input.GetAxisRaw("Vertical");     // up: 1, down: -1
+			steer = Input.GetAxisRaw("Horizontal"); // left: -1, right: 1
+		}
+
+		bool movingForward = Vector2.Dot(body.velocity, transform.up) > 0;
 
 		float engine = 0;
 		// get the force for each powered wheel
-		if (acc == -1 && phySpeed <= maxSpeed) { // forward engine
-			engine = -engineAcc;
+		// if (acc == 1 && body.velocity.magnitude <= maxSpeed) { // forward engine
+		if (acc == 1) {
+			engine = engineAcc;
 		}
-		else if (acc == 1) {
+		else if (acc == -1) {
 			if (movingForward) { // if moving forward use brake engine
-				engine = engineBrk;
+				engine = -engineBrk;
 			}
-			else if (phySpeed <= maxSpeedRev) { // use reverse engine
-				engine = engineRev;
+			else if (body.velocity.magnitude <= maxSpeedRev) { // use reverse engine
+				engine = -engineRev;
 			}
 		}
 
@@ -126,32 +130,31 @@ public class DrivingScript : MonoBehaviour {
 			}
 
 			// kill sideways speed of wheel
-			killSidewaysSpeed(wheel, drift);
+			killSidewaysSpeed(wheel, driftControl);
 		}
 
 		// kill sideways speed of car
-		killSidewaysSpeed(gameObject, drift);
+		killSidewaysSpeed(gameObject, driftControl);
 
-		// // get torque value based acceleration
-		// float torque = torqueAcc; // forward torque
-		// float currentMaxSpeed = maxSpeed;
-		// if (acc == -1 || !movingForward) {
-		// 	torque = -torqueRev; // reverse torque
-		// 	currentMaxSpeed = maxSpeedRev; // reverse max speed
-		// }
+		// // add torque value based acceleration
+		// float torque = acc * steer * -steerTorque; // forward torque
+		// float currentMaxSpeed = (acc < 0 ? maxSpeedRev : maxSpeed);
+		// body.AddTorque(torque * Mathf.Min(body.velocity.magnitude * 2 / currentMaxSpeed, 1));
 
-		// // apply torque --- makes the car rotate faster
-		// body.AddTorque(torque * Mathf.Sign(steer) * Mathf.Min(phySpeed * 2 / currentMaxSpeed, 1));
+		// prevent excess sliding
+		if (body.velocity.magnitude <= 0.2 && acc == 0) {
+			body.velocity = Vector2.zero;
+		}
 
 		// angular friction when not steering
 		if (steerDir == 0) {
 			body.angularVelocity -= Mathf.Sign(body.angularVelocity) * torqueDamp;
 		}
 
-		// prevent excess sliding
-		if (phySpeed <= 0.2 && acc == 0) {
-			body.velocity = Vector2.zero;
-		}
+		// angular friction when not moving
+		// if (body.velocity.magnitude < 5) {
+		// 	body.angularVelocity -= body.angularVelocity * torqueDamp;
+		// }
 	}
 
 	void killSidewaysSpeed(GameObject obj, float drift) {

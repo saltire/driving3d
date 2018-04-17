@@ -20,6 +20,10 @@ GameObject:
   m_Component:
   - component: {fileID: 4543688843018346}
   - component: {fileID: 212969123440292176}
+  - component: {fileID: 50041793180559396}
+  - component: {fileID: 70441132196414886}
+  - component: {fileID: 114074336886289340}
+  - component: {fileID: 61191231390293242}
   m_Layer: 0
   m_Name: banshee
   m_TagString: Untagged
@@ -33,13 +37,100 @@ Transform:
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 1941561081157256}
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 1.5, y: 0, z: 0}
+  m_LocalRotation: {x: -0, y: -0, z: 0.5168177, w: -0.8560955}
+  m_LocalPosition: {x: 2.38, y: -0.61, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 0}
   m_RootOrder: 0
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 297.762}
+--- !u!50 &50041793180559396
+Rigidbody2D:
+  serializedVersion: 4
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1941561081157256}
+  m_BodyType: 0
+  m_Simulated: 1
+  m_UseFullKinematicContacts: 0
+  m_UseAutoMass: 0
+  m_Mass: 10
+  m_LinearDrag: 0.6
+  m_AngularDrag: 5
+  m_GravityScale: 1
+  m_Material: {fileID: 6200000, guid: 0f31662ca16eb4a4f9b75dbe38ef326c, type: 2}
+  m_Interpolate: 0
+  m_SleepingMode: 1
+  m_CollisionDetection: 0
+  m_Constraints: 0
+--- !u!61 &61191231390293242
+BoxCollider2D:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1941561081157256}
+  m_Enabled: 1
+  m_Density: 1
+  m_Material: {fileID: 0}
+  m_IsTrigger: 0
+  m_UsedByEffector: 0
+  m_UsedByComposite: 0
+  m_Offset: {x: 0, y: 0}
+  m_SpriteTilingProperty:
+    border: {x: 0, y: 0, z: 0, w: 0}
+    pivot: {x: 0.5, y: 0.5}
+    oldSize: {x: 0.5, y: 1}
+    newSize: {x: 0.32, y: 0.64}
+    adaptiveTilingThreshold: 0.5
+    drawMode: 0
+    adaptiveTiling: 0
+  m_AutoTiling: 0
+  serializedVersion: 2
+  m_Size: {x: 0.38, y: 0.95}
+  m_EdgeRadius: 0
+--- !u!70 &70441132196414886
+CapsuleCollider2D:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1941561081157256}
+  m_Enabled: 0
+  m_Density: 1
+  m_Material: {fileID: 0}
+  m_IsTrigger: 0
+  m_UsedByEffector: 0
+  m_UsedByComposite: 0
+  m_Offset: {x: 0, y: 0}
+  m_Size: {x: 0.4, y: 1.0000001}
+  m_Direction: 0
+--- !u!114 &114074336886289340
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1941561081157256}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d66c13a844cb58049985fa4dc499544d, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  playerControlled: 0
+  frontWheelDrive: 0
+  maxSpeed: 12
+  maxSpeedRev: 8
+  engineAcc: 14
+  engineBrk: 16
+  engineRev: 10
+  wheelXoff: 12
+  wheelYoff: 13
+  maxWheelAngle: 30
+  wheelAngleVelocity: 5
+  wheelMotorSpeed: 100
+  torqueDamp: 0.1
+  driftControl: 0.5
+  ppu: 64
+  Wheel: {fileID: 1527572955865146, guid: c0f8ff3f6105f9c42951ebd1fea16f3f, type: 2}
 --- !u!212 &212969123440292176
 SpriteRenderer:
   m_ObjectHideFlags: 1
@@ -71,8 +162,8 @@ SpriteRenderer:
   m_AutoUVMaxDistance: 0.5
   m_AutoUVMaxAngle: 89
   m_LightmapParameters: {fileID: 0}
-  m_SortingLayerID: 0
-  m_SortingLayer: 0
+  m_SortingLayerID: 458133541
+  m_SortingLayer: 1
   m_SortingOrder: 0
   m_Sprite: {fileID: 21300000, guid: 1176ae5af817d7043803fe82ddb49c93, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
