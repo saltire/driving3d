@@ -7,8 +7,8 @@ public class DrivingScript : MonoBehaviour {
 	public bool frontWheelDrive = false;
 
 	// Edit these values to customize car
-	public float maxSpeed = 12;          // maximum speed car can attain
-	public float maxSpeedRev = 8;        // maximum speed car can attain reversing
+	public float airResistance = 0.2f;   // air drag
+	public float rollingResistance = 5;  // road friction
 
 	// these values will largely depends on the density of the car
 	public float engineAcc = 14;         // forward force, moving forward
@@ -82,19 +82,13 @@ public class DrivingScript : MonoBehaviour {
 
 		bool movingForward = Vector2.Dot(body.velocity, transform.up) > 0;
 
+		// get the engine force for each powered wheel
 		float engine = 0;
-		// get the force for each powered wheel
-		// if (acc == 1 && body.velocity.magnitude <= maxSpeed) { // forward engine
 		if (acc == 1) {
 			engine = engineAcc;
 		}
 		else if (acc == -1) {
-			if (movingForward) { // if moving forward use brake engine
-				engine = -engineBrk;
-			}
-			else if (body.velocity.magnitude <= maxSpeedRev) { // use reverse engine
-				engine = -engineRev;
-			}
+			engine = (movingForward ? -engineBrk : -engineRev);
 		}
 
 		steerDir += Mathf.Clamp((steer * maxWheelAngle) - steerDir, -wheelAngleVelocity, wheelAngleVelocity);
@@ -130,11 +124,11 @@ public class DrivingScript : MonoBehaviour {
 			}
 
 			// kill sideways speed of wheel
-			killSidewaysSpeed(wheel, driftControl);
+			killSidewaysSpeed(wheel);
 		}
 
 		// kill sideways speed of car
-		killSidewaysSpeed(gameObject, driftControl);
+		killSidewaysSpeed(gameObject);
 
 		// // add torque value based acceleration
 		// float torque = acc * steer * -steerTorque; // forward torque
@@ -155,20 +149,37 @@ public class DrivingScript : MonoBehaviour {
 		// if (body.velocity.magnitude < 5) {
 		// 	body.angularVelocity -= body.angularVelocity * torqueDamp;
 		// }
+
+		// Debug.Log(body.velocity.magnitude);
+		// drawVector(transform, body.velocity, Color.green);
+
+		// add air and rolling resistance
+		Vector2 localVelocity = transform.InverseTransformVector(body.velocity);
+
+		Vector2 airVector = localVelocity * localVelocity.magnitude * -airResistance;
+		body.AddRelativeForce(airVector);
+		// drawVector(transform, transform.rotation * airVector, Color.blue);
+
+		Vector2 rollingVector = new Vector2(0, localVelocity.y) * -rollingResistance;
+		body.AddRelativeForce(rollingVector);
+		// drawVector(transform, transform.rotation * rollingVector, Color.red);
 	}
 
-	void killSidewaysSpeed(GameObject obj, float drift) {
+	void killSidewaysSpeed(GameObject obj) {
 		Rigidbody2D body = obj.GetComponent<Rigidbody2D>();
 
 		// project velocity to the axis and return the magnitude
 		float mag = Vector2.Dot(obj.transform.right, body.velocity);
 
 		// apply drift effect *allows some sideways speed by decreasing mag
-		mag *= drift / Mathf.Max(body.velocity.magnitude, 1);
+		mag *= driftControl / Mathf.Max(body.velocity.magnitude, 1);
+
+		Vector2 sideVelocity = mag * new Vector2(obj.transform.right.x, obj.transform.right.y);
+		// drawVector(obj.transform, sideVelocity, Color.white);
 
 		// subtract the sideways speed from the total speed
 		// note: decreasing mag from drifting will leave some sideways speed
-		body.velocity -= mag * new Vector2(obj.transform.right.x, obj.transform.right.y);
+		body.velocity -= sideVelocity;
 	}
 
 	static float getCurrentAngle(Transform transform) {
@@ -177,5 +188,10 @@ public class DrivingScript : MonoBehaviour {
 			currentAngle -= 360;
 		}
 		return currentAngle;
+	}
+
+	static void drawVector(Transform transform, Vector2 vector, Color color) {
+		Debug.DrawLine(transform.position,
+			transform.position + new Vector3(vector.x, vector.y, 0), color, Time.deltaTime, false);
 	}
 }

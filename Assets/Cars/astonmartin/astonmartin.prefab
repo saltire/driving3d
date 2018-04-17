@@ -267,7 +267,7 @@ Rigidbody2D:
   m_UseFullKinematicContacts: 0
   m_UseAutoMass: 0
   m_Mass: 10
-  m_LinearDrag: 0.6
+  m_LinearDrag: 0
   m_AngularDrag: 5
   m_GravityScale: 1
   m_Material: {fileID: 6200000, guid: 0f31662ca16eb4a4f9b75dbe38ef326c, type: 2}
@@ -544,8 +544,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   playerControlled: 1
   frontWheelDrive: 1
-  maxSpeed: 8
-  maxSpeedRev: 5
+  airResistance: 0.1
+  rollingResistance: 3
   engineAcc: 35
   engineBrk: 50
   engineRev: 20
