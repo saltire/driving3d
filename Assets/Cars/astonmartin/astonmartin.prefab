@@ -268,7 +268,7 @@ Rigidbody2D:
   m_UseAutoMass: 0
   m_Mass: 10
   m_LinearDrag: 0
-  m_AngularDrag: 5
+  m_AngularDrag: 15
   m_GravityScale: 1
   m_Material: {fileID: 6200000, guid: 0f31662ca16eb4a4f9b75dbe38ef326c, type: 2}
   m_Interpolate: 0
@@ -544,8 +544,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   playerControlled: 1
   frontWheelDrive: 1
-  airResistance: 0.1
-  rollingResistance: 3
+  airResistance: 0.2
+  rollingResistance: 6
   engineAcc: 35
   engineBrk: 50
   engineRev: 20
@@ -554,6 +554,8 @@ MonoBehaviour:
   maxWheelAngle: 35
   wheelAngleVelocity: 5
   wheelMotorSpeed: 200
+  steerTorque: 5
+  maxSteerTorque: 20
   torqueDamp: 0.1
   driftControl: 0.5
   ppu: 64

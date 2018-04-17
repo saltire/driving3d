@@ -2079,16 +2079,6 @@ Prefab:
       propertyPath: m_RootOrder
       value: 7
       objectReference: {fileID: 0}
-    - target: {fileID: 114028304283730994, guid: 31fa2d24d6bccf5419641c08337ac04d,
-        type: 2}
-      propertyPath: airResistance
-      value: 0.2
-      objectReference: {fileID: 0}
-    - target: {fileID: 114028304283730994, guid: 31fa2d24d6bccf5419641c08337ac04d,
-        type: 2}
-      propertyPath: rollingResistance
-      value: 5
-      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 100100000, guid: 31fa2d24d6bccf5419641c08337ac04d, type: 2}
   m_IsPrefabParent: 0

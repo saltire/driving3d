@@ -21,7 +21,8 @@ public class DrivingScript : MonoBehaviour {
 	public float wheelAngleVelocity = 5; // how quickly a wheel rotates in degrees per frame
 	public float wheelMotorSpeed = 100;
 
-	// public float steerTorque = 6;        // extra torque on the car when turning
+	public float steerTorque = 5f;       // extra torque on the car when turning (multiplied by speed)
+	public float maxSteerTorque = 20;    // max amount of extra steering torque
 	public float torqueDamp = 0.75f;     // how quickly the car will straighten when not turning
 																	     // range: (0-1)
 
@@ -130,10 +131,10 @@ public class DrivingScript : MonoBehaviour {
 		// kill sideways speed of car
 		killSidewaysSpeed(gameObject);
 
-		// // add torque value based acceleration
-		// float torque = acc * steer * -steerTorque; // forward torque
-		// float currentMaxSpeed = (acc < 0 ? maxSpeedRev : maxSpeed);
-		// body.AddTorque(torque * Mathf.Min(body.velocity.magnitude * 2 / currentMaxSpeed, 1));
+		// add extra torque when steering, to make up for angular drag
+		float torque = (movingForward ? -1 : 1) * steer *
+			Mathf.Min(steerTorque * body.velocity.magnitude, maxSteerTorque);
+		body.AddTorque(torque);
 
 		// prevent excess sliding
 		if (body.velocity.magnitude <= 0.2 && acc == 0) {
@@ -144,11 +145,6 @@ public class DrivingScript : MonoBehaviour {
 		if (steerDir == 0) {
 			body.angularVelocity -= Mathf.Sign(body.angularVelocity) * torqueDamp;
 		}
-
-		// angular friction when not moving
-		// if (body.velocity.magnitude < 5) {
-		// 	body.angularVelocity -= body.angularVelocity * torqueDamp;
-		// }
 
 		// Debug.Log(body.velocity.magnitude);
 		// drawVector(transform, body.velocity, Color.green);
