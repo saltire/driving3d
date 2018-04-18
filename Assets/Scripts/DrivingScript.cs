@@ -9,7 +9,7 @@ public class DrivingScript : MonoBehaviour {
 	// Edit these values to customize car
 	public float airResistance = 0.2f;     // air drag
 	public float rollingResistance = 1.5f; // road friction
-	public float brakeResistance = 20;     // handbrake friction
+	public float brakeResistance = 15;     // handbrake friction
 
 	// these values will largely depends on the density of the car
 	public float engineAcc = 14;           // forward force, moving forward
@@ -24,7 +24,7 @@ public class DrivingScript : MonoBehaviour {
 
 	public float steerTorque = 5;          // extra torque on the car when turning (multiplied by speed)
 	public float maxSteerTorque = 20;      // max amount of extra steering torque
-	public float brakeTorque = 10;         // extra torque when handbraking
+	public float brakeTorque = 8;          // extra torque when handbraking
 	public float torqueDamp = 0.75f;       // how quickly the car will straighten when not turning
 
 	public float driftControl = 0.5f;      // drift control, usually between (0-1) but can be higher

@@ -21,7 +21,6 @@ GameObject:
   - component: {fileID: 4543688843018346}
   - component: {fileID: 212969123440292176}
   - component: {fileID: 50041793180559396}
-  - component: {fileID: 70441132196414886}
   - component: {fileID: 114074336886289340}
   - component: {fileID: 61191231390293242}
   m_Layer: 0
@@ -89,21 +88,6 @@ BoxCollider2D:
   serializedVersion: 2
   m_Size: {x: 0.38, y: 0.95}
   m_EdgeRadius: 0
---- !u!70 &70441132196414886
-CapsuleCollider2D:
-  m_ObjectHideFlags: 1
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 100100000}
-  m_GameObject: {fileID: 1941561081157256}
-  m_Enabled: 0
-  m_Density: 1
-  m_Material: {fileID: 0}
-  m_IsTrigger: 0
-  m_UsedByEffector: 0
-  m_UsedByComposite: 0
-  m_Offset: {x: 0, y: 0}
-  m_Size: {x: 0.4, y: 1.0000001}
-  m_Direction: 0
 --- !u!114 &114074336886289340
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -116,10 +100,10 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   playerControlled: 0
-  frontWheelDrive: 0
+  frontWheelDrive: 1
   airResistance: 0.2
   rollingResistance: 1.5
-  brakeResistance: 20
+  brakeResistance: 15
   engineAcc: 35
   engineBrk: 50
   engineRev: 20
@@ -130,7 +114,7 @@ MonoBehaviour:
   wheelMotorSpeed: 100
   steerTorque: 5
   maxSteerTorque: 20
-  brakeTorque: 10
+  brakeTorque: 8
   torqueDamp: 0.1
   driftControl: 0.5
   ppu: 64
