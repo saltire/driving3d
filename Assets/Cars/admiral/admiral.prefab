@@ -118,7 +118,8 @@ MonoBehaviour:
   playerControlled: 0
   frontWheelDrive: 0
   airResistance: 0.2
-  rollingResistance: 6
+  rollingResistance: 1.5
+  brakeResistance: 20
   engineAcc: 35
   engineBrk: 50
   engineRev: 20
@@ -129,6 +130,7 @@ MonoBehaviour:
   wheelMotorSpeed: 100
   steerTorque: 5
   maxSteerTorque: 20
+  brakeTorque: 10
   torqueDamp: 0.1
   driftControl: 0.5
   ppu: 64

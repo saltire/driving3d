@@ -7,29 +7,30 @@ public class DrivingScript : MonoBehaviour {
 	public bool frontWheelDrive = false;
 
 	// Edit these values to customize car
-	public float airResistance = 0.2f;   // air drag
-	public float rollingResistance = 5;  // road friction
+	public float airResistance = 0.2f;     // air drag
+	public float rollingResistance = 1.5f; // road friction
+	public float brakeResistance = 20;     // handbrake friction
 
 	// these values will largely depends on the density of the car
-	public float engineAcc = 14;         // forward force, moving forward
-	public float engineBrk = 16;         // braking force
-	public float engineRev = 10;         // reverse force, moving backward
+	public float engineAcc = 14;           // forward force, moving forward
+	public float engineBrk = 16;           // braking force
+	public float engineRev = 10;           // reverse force, moving backward
 
-	public float wheelXoff = 14;         // relative x position of wheel in pixels
-	public float wheelYoff = 13;         // relative y position of wheel in pixels
-	public float maxWheelAngle = 30;     // the maximum angle the wheel can rotate
-	public float wheelAngleVelocity = 5; // how quickly a wheel rotates in degrees per frame
+	public float wheelXoff = 14;           // relative x position of wheel in pixels
+	public float wheelYoff = 13;           // relative y position of wheel in pixels
+	public float maxWheelAngle = 30;       // the maximum angle the wheel can rotate
+	public float wheelAngleVelocity = 5;   // how quickly a wheel rotates in degrees per frame
 	public float wheelMotorSpeed = 100;
 
-	public float steerTorque = 5f;       // extra torque on the car when turning (multiplied by speed)
-	public float maxSteerTorque = 20;    // max amount of extra steering torque
-	public float torqueDamp = 0.75f;     // how quickly the car will straighten when not turning
-																	     // range: (0-1)
+	public float steerTorque = 5;          // extra torque on the car when turning (multiplied by speed)
+	public float maxSteerTorque = 20;      // max amount of extra steering torque
+	public float brakeTorque = 10;         // extra torque when handbraking
+	public float torqueDamp = 0.75f;       // how quickly the car will straighten when not turning
 
-	public float driftControl = 0.5f;    // drift control, usually between (0-1) but can be higher
-																	     // 0: no control | 1: high control
+	public float driftControl = 0.5f;      // drift control, usually between (0-1) but can be higher
+																	       // 0: no control | 1: high control
 
-	public float ppu = 64;							 // pixels per unit
+	public float ppu = 64;						  	 // pixels per unit
 
 	public GameObject Wheel;
 
@@ -39,16 +40,16 @@ public class DrivingScript : MonoBehaviour {
 
 	void Start() {
 		wheels = new GameObject[] {
-			addWheel(-wheelXoff, wheelYoff, frontWheelDrive, true),
-			addWheel(wheelXoff, wheelYoff, frontWheelDrive, true),
-			addWheel(-wheelXoff, -wheelYoff, !frontWheelDrive, false),
-			addWheel(wheelXoff, -wheelYoff, !frontWheelDrive, false),
+			addWheel(-wheelXoff, wheelYoff, frontWheelDrive, true, false),
+			addWheel(wheelXoff, wheelYoff, frontWheelDrive, true, false),
+			addWheel(-wheelXoff, -wheelYoff, !frontWheelDrive, false, true),
+			addWheel(wheelXoff, -wheelYoff, !frontWheelDrive, false, true),
 		};
 
 		body = GetComponent<Rigidbody2D>();
 	}
 
-	GameObject addWheel(float xoff, float yoff, bool powered, bool rotatable) {
+	GameObject addWheel(float xoff, float yoff, bool powered, bool rotatable, bool handbrake) {
 		GameObject wheel = (GameObject)Instantiate(Wheel,
 			transform.position + (transform.rotation * new Vector3(xoff / ppu, yoff / ppu, 0)),
 			transform.rotation, transform);
@@ -56,6 +57,7 @@ public class DrivingScript : MonoBehaviour {
 		WheelScript scr = wheel.GetComponent<WheelScript>();
 		scr.powered = powered;
 		scr.rotatable = rotatable;
+		scr.handbrake = handbrake;
 
 		if (rotatable) {
 			HingeJoint2D hingeJoint = wheel.AddComponent<HingeJoint2D>();
@@ -75,10 +77,12 @@ public class DrivingScript : MonoBehaviour {
 	void FixedUpdate() {
 		float acc = 0;
 		float steer = 0;
+		float brake = 0;
 
 		if (playerControlled) {
 			acc = Input.GetAxisRaw("Vertical");     // up: 1, down: -1
 			steer = Input.GetAxisRaw("Horizontal"); // left: -1, right: 1
+			brake = Input.GetAxisRaw("Handbrake");
 		}
 
 		bool movingForward = Vector2.Dot(body.velocity, transform.up) > 0;
@@ -124,6 +128,20 @@ public class DrivingScript : MonoBehaviour {
 				wheelBody.AddRelativeForce(new Vector2(0, engine));
 			}
 
+			Vector2 localWheelVelocity = transform.InverseTransformVector(wheelBody.velocity);
+
+			// add rolling resistance
+			Vector2 rollingVector = new Vector2(0, localWheelVelocity.y) * -rollingResistance;
+			body.AddRelativeForce(rollingVector);
+			// drawVector(wheel.transform, transform.rotation * rollingVector, Color.red);
+
+			// add handbrake resistance
+			if (brake == 1 && wheelScr.handbrake) {
+				Vector2 brakeVector = new Vector2(0, localWheelVelocity.y) * -brakeResistance;
+				wheelBody.AddRelativeForce(brakeVector);
+				// drawVector(wheel.transform, transform.rotation * brakeVector, Color.magenta);
+			}
+
 			// kill sideways speed of wheel
 			killSidewaysSpeed(wheel);
 		}
@@ -133,7 +151,8 @@ public class DrivingScript : MonoBehaviour {
 
 		// add extra torque when steering, to make up for angular drag
 		float torque = (movingForward ? -1 : 1) * steer *
-			Mathf.Min(steerTorque * body.velocity.magnitude, maxSteerTorque);
+			(Mathf.Min(steerTorque * body.velocity.magnitude, maxSteerTorque) +
+			(brake * brakeTorque * body.velocity.magnitude));
 		body.AddTorque(torque);
 
 		// prevent excess sliding
@@ -146,19 +165,13 @@ public class DrivingScript : MonoBehaviour {
 			body.angularVelocity -= Mathf.Sign(body.angularVelocity) * torqueDamp;
 		}
 
+		// add air resistance
+		Vector2 airVector = body.velocity * body.velocity.magnitude * -airResistance;
+		body.AddForce(airVector);
+		// drawVector(transform, airVector, Color.blue);
+
 		// Debug.Log(body.velocity.magnitude);
 		// drawVector(transform, body.velocity, Color.green);
-
-		// add air and rolling resistance
-		Vector2 localVelocity = transform.InverseTransformVector(body.velocity);
-
-		Vector2 airVector = localVelocity * localVelocity.magnitude * -airResistance;
-		body.AddRelativeForce(airVector);
-		// drawVector(transform, transform.rotation * airVector, Color.blue);
-
-		Vector2 rollingVector = new Vector2(0, localVelocity.y) * -rollingResistance;
-		body.AddRelativeForce(rollingVector);
-		// drawVector(transform, transform.rotation * rollingVector, Color.red);
 	}
 
 	void killSidewaysSpeed(GameObject obj) {
