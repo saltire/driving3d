@@ -117,8 +117,8 @@ MonoBehaviour:
   brakeTorque: 8
   torqueDamp: 0.1
   driftControl: 0.5
-  ppu: 64
-  Wheel: {fileID: 1527572955865146, guid: c0f8ff3f6105f9c42951ebd1fea16f3f, type: 2}
+  wheelPrefab: {fileID: 1527572955865146, guid: c0f8ff3f6105f9c42951ebd1fea16f3f,
+    type: 2}
 --- !u!212 &212731110997680014
 SpriteRenderer:
   m_ObjectHideFlags: 1

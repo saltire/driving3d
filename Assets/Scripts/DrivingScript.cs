@@ -28,18 +28,26 @@ public class DrivingScript : MonoBehaviour {
 	public float torqueDamp = 0.75f;       // how quickly the car will straighten when not turning
 
 	public float driftControl = 0.5f;      // drift control, usually between (0-1) but can be higher
-																	       // 0: no control | 1: high control
 
-	public float ppu = 64;						  	 // pixels per unit
+	public GameObject wheelPrefab;
 
-	public GameObject Wheel;
+	struct Wheel {
+		public GameObject obj;
+		public bool powered;
+		public bool rotatable;
+		public bool handbrake;
+	}
 
+	Wheel[] wheels;
+	float ppu;
+	float steerDir = 0;                    // the angle the wheels should be at
 	Rigidbody2D body;
-	GameObject[] wheels;
-	float steerDir = 0;                  // the angle the wheels should be at
 
 	void Start() {
-		wheels = new GameObject[] {
+		ConfigScript config = (ConfigScript)Object.FindObjectOfType(typeof(ConfigScript));
+		ppu = config.pixelsPerUnit;
+
+		wheels = new Wheel[] {
 			addWheel(-wheelXoff, wheelYoff, frontWheelDrive, true, false),
 			addWheel(wheelXoff, wheelYoff, frontWheelDrive, true, false),
 			addWheel(-wheelXoff, -wheelYoff, !frontWheelDrive, false, true),
@@ -49,25 +57,25 @@ public class DrivingScript : MonoBehaviour {
 		body = GetComponent<Rigidbody2D>();
 	}
 
-	GameObject addWheel(float xoff, float yoff, bool powered, bool rotatable, bool handbrake) {
-		GameObject wheel = (GameObject)Instantiate(Wheel,
-			transform.position + (transform.rotation * new Vector3(xoff / ppu, yoff / ppu, 0)),
-			transform.rotation, transform);
+	Wheel addWheel(float xoff, float yoff, bool powered, bool rotatable, bool handbrake) {
+		Wheel wheel = new Wheel {
+			obj = (GameObject)Instantiate(wheelPrefab, transform),
+			powered = powered,
+			rotatable = rotatable,
+			handbrake = handbrake,
+		};
 
-		WheelScript scr = wheel.GetComponent<WheelScript>();
-		scr.powered = powered;
-		scr.rotatable = rotatable;
-		scr.handbrake = handbrake;
+		wheel.obj.transform.localPosition += new Vector3(xoff / ppu, yoff / ppu, 0);
 
 		if (rotatable) {
-			HingeJoint2D hingeJoint = wheel.AddComponent<HingeJoint2D>();
+			HingeJoint2D hingeJoint = wheel.obj.AddComponent<HingeJoint2D>();
 			hingeJoint.connectedBody = gameObject.GetComponent<Rigidbody2D>();
 			hingeJoint.useLimits = true;
 			hingeJoint.limits = new JointAngleLimits2D() { max = maxWheelAngle, min = -maxWheelAngle };
 			hingeJoint.useMotor = true;
 		}
 		else {
-			FixedJoint2D fixedJoint = wheel.AddComponent<FixedJoint2D>();
+			FixedJoint2D fixedJoint = wheel.obj.AddComponent<FixedJoint2D>();
 			fixedJoint.connectedBody = gameObject.GetComponent<Rigidbody2D>();
 		}
 
@@ -98,16 +106,15 @@ public class DrivingScript : MonoBehaviour {
 
 		steerDir += Mathf.Clamp((steer * maxWheelAngle) - steerDir, -wheelAngleVelocity, wheelAngleVelocity);
 
-		foreach (GameObject wheel in wheels) {
-			WheelScript wheelScr = wheel.GetComponent<WheelScript>();
-			Rigidbody2D wheelBody = wheel.GetComponent<Rigidbody2D>();
+		foreach (Wheel wheel in wheels) {
+			Rigidbody2D wheelBody = wheel.obj.GetComponent<Rigidbody2D>();
 
 			// set the rotation(angle) for the rotatable wheels
-			if (wheelScr.rotatable) {
-				float currentAngle = getCurrentAngle(wheel.transform);
+			if (wheel.rotatable) {
+				float currentAngle = getCurrentAngle(wheel.obj.transform);
 				float angleDiff = steerDir - currentAngle;
 
-				HingeJoint2D joint = wheel.GetComponent<HingeJoint2D>();
+				HingeJoint2D joint = wheel.obj.GetComponent<HingeJoint2D>();
 				JointMotor2D motor = joint.motor;
 				if (Mathf.Abs(angleDiff) > .01) {
 					motor.motorSpeed = wheelMotorSpeed * Mathf.Sign(angleDiff);
@@ -124,7 +131,7 @@ public class DrivingScript : MonoBehaviour {
 			}
 
 			// apply engine force
-			if (wheelScr.powered) {
+			if (wheel.powered) {
 				wheelBody.AddRelativeForce(new Vector2(0, engine));
 			}
 
@@ -136,14 +143,14 @@ public class DrivingScript : MonoBehaviour {
 			// drawVector(wheel.transform, transform.rotation * rollingVector, Color.red);
 
 			// add handbrake resistance
-			if (brake == 1 && wheelScr.handbrake) {
+			if (brake == 1 && wheel.handbrake) {
 				Vector2 brakeVector = new Vector2(0, localWheelVelocity.y) * -brakeResistance;
 				wheelBody.AddRelativeForce(brakeVector);
 				// drawVector(wheel.transform, transform.rotation * brakeVector, Color.magenta);
 			}
 
 			// kill sideways speed of wheel
-			killSidewaysSpeed(wheel);
+			killSidewaysSpeed(wheel.obj);
 		}
 
 		// kill sideways speed of car
