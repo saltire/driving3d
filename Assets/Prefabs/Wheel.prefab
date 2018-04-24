@@ -21,7 +21,6 @@ GameObject:
   - component: {fileID: 4993400929632898}
   - component: {fileID: 212347002884210860}
   - component: {fileID: 50334965971865540}
-  - component: {fileID: 114449139940004856}
   - component: {fileID: 61361381757573096}
   m_Layer: 0
   m_Name: Wheel
@@ -88,19 +87,6 @@ BoxCollider2D:
   serializedVersion: 2
   m_Size: {x: 0.046875, y: 0.125}
   m_EdgeRadius: 0
---- !u!114 &114449139940004856
-MonoBehaviour:
-  m_ObjectHideFlags: 1
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 100100000}
-  m_GameObject: {fileID: 1527572955865146}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 6e665159d632b9049bf6d22f1d53233e, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  powered: 0
-  rotatable: 0
 --- !u!212 &212347002884210860
 SpriteRenderer:
   m_ObjectHideFlags: 1

@@ -42,6 +42,7 @@ public class DrivingScript : MonoBehaviour {
 	float ppu;
 	float steerDir = 0;                    // the angle the wheels should be at
 	Rigidbody2D body;
+	DrivingAIScript ai;
 
 	void Start() {
 		ConfigScript config = (ConfigScript)Object.FindObjectOfType(typeof(ConfigScript));
@@ -55,6 +56,7 @@ public class DrivingScript : MonoBehaviour {
 		};
 
 		body = GetComponent<Rigidbody2D>();
+		ai = GetComponent<DrivingAIScript>();
 	}
 
 	Wheel addWheel(float xoff, float yoff, bool powered, bool rotatable, bool handbrake) {
@@ -92,19 +94,25 @@ public class DrivingScript : MonoBehaviour {
 			steer = Input.GetAxisRaw("Horizontal"); // left: -1, right: 1
 			brake = Input.GetAxisRaw("Handbrake");
 		}
+		else if (ai != null) {
+			DrivingActions actions = ai.getDrivingActions();
+			acc = actions.acc;
+			steer = actions.steer;
+		}
 
 		bool movingForward = Vector2.Dot(body.velocity, transform.up) > 0;
 
 		// get the engine force for each powered wheel
 		float engine = 0;
-		if (acc == 1) {
-			engine = engineAcc;
+		if (acc > 0) {
+			engine = engineAcc * acc;
 		}
-		else if (acc == -1) {
-			engine = (movingForward ? -engineBrk : -engineRev);
+		else if (acc < 0) {
+			engine = (movingForward ? engineBrk : engineRev) * acc;
 		}
 
-		steerDir += Mathf.Clamp((steer * maxWheelAngle) - steerDir, -wheelAngleVelocity, wheelAngleVelocity);
+		steerDir += Mathf.Clamp((steer * maxWheelAngle) - steerDir,
+			-wheelAngleVelocity, wheelAngleVelocity);
 
 		foreach (Wheel wheel in wheels) {
 			Rigidbody2D wheelBody = wheel.obj.GetComponent<Rigidbody2D>();
@@ -190,7 +198,7 @@ public class DrivingScript : MonoBehaviour {
 		// apply drift effect *allows some sideways speed by decreasing mag
 		mag *= driftControl / Mathf.Max(body.velocity.magnitude, 1);
 
-		Vector2 sideVelocity = mag * new Vector2(obj.transform.right.x, obj.transform.right.y);
+		Vector2 sideVelocity = mag * obj.transform.right;
 		// drawVector(obj.transform, sideVelocity, Color.white);
 
 		// subtract the sideways speed from the total speed
@@ -208,6 +216,6 @@ public class DrivingScript : MonoBehaviour {
 
 	static void drawVector(Transform transform, Vector2 vector, Color color) {
 		Debug.DrawLine(transform.position,
-			transform.position + new Vector3(vector.x, vector.y, 0), color, Time.deltaTime, false);
+			transform.position + (Vector3)vector, color, Time.deltaTime, false);
 	}
 }

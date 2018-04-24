@@ -6,17 +6,19 @@ public class CopLightsScript : MonoBehaviour {
 	public float speed = 10;
 	public bool startOn = false;
 
+	DrivingScript driving;
 	Material material;
 	bool lit;
 
 	void Start() {
+		driving = GetComponentInParent<DrivingScript>();
 		material = GetComponent<SpriteRenderer>().material;
 
 		setLights(startOn);
 	}
 
 	void Update() {
-		if (Input.GetButtonDown("Cop lights")) {
+		if (driving.playerControlled && Input.GetButtonDown("Cop lights")) {
 			setLights(!lit);
 		}
 

@@ -23,6 +23,8 @@ GameObject:
   - component: {fileID: 50041793180559396}
   - component: {fileID: 114074336886289340}
   - component: {fileID: 61191231390293242}
+  - component: {fileID: 114692735754217250}
+  - component: {fileID: 114898511604266048}
   m_Layer: 0
   m_Name: banshee
   m_TagString: Untagged
@@ -36,13 +38,13 @@ Transform:
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 1941561081157256}
-  m_LocalRotation: {x: -0, y: -0, z: 0.5168177, w: -0.8560955}
-  m_LocalPosition: {x: 2.38, y: -0.61, z: 0}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0.5, y: 1.5, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 0}
   m_RootOrder: 0
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 297.762}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!50 &50041793180559396
 Rigidbody2D:
   serializedVersion: 4
@@ -109,16 +111,48 @@ MonoBehaviour:
   engineRev: 20
   wheelXoff: 12
   wheelYoff: 13
-  maxWheelAngle: 30
+  maxWheelAngle: 35
   wheelAngleVelocity: 5
-  wheelMotorSpeed: 100
-  steerTorque: 5
-  maxSteerTorque: 20
+  wheelMotorSpeed: 200
+  steerTorque: 15
+  maxSteerTorque: 25
   brakeTorque: 8
   torqueDamp: 0.1
   driftControl: 0.5
   wheelPrefab: {fileID: 1527572955865146, guid: c0f8ff3f6105f9c42951ebd1fea16f3f,
     type: 2}
+--- !u!114 &114692735754217250
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1941561081157256}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a64ca32eaae57e944bf6876d82686b95, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  headlightPrefab: {fileID: 1046675780958622, guid: 89028038717103b4aa97c85af2836174,
+    type: 2}
+  xOffset: 9
+  yOffset: 27
+  angle: 10
+  startOn: 1
+--- !u!114 &114898511604266048
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1941561081157256}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 2e8bd99bde9230b408ec8d7da70fdaca, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  accAmount: 0.4
+  lookAhead: 0.4
+  speedLookAhead: 0.3
+  turnBraking: 1.1
 --- !u!212 &212969123440292176
 SpriteRenderer:
   m_ObjectHideFlags: 1

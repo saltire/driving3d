@@ -7,20 +7,22 @@ public class HeadlightsScript : MonoBehaviour {
 	public float xOffset = 9;
 	public float yOffset = 27;
 	public float angle = 10;
-	public bool startOn = false;
+	public bool startOn = true;
 
-	GameObject[] headlights;
 	float ppu;
+	DrivingScript driving;
+	GameObject[] headlights;
 
 	void Start () {
 		ConfigScript config = (ConfigScript)Object.FindObjectOfType(typeof(ConfigScript));
 		ppu = config.pixelsPerUnit;
 
+		driving = GetComponent<DrivingScript>();
+
 		headlights = new GameObject[] {
 			addHeadlight(true),
 			addHeadlight(false),
 		};
-
 		foreach (GameObject light in headlights) {
 			light.SetActive(startOn);
 		}
@@ -35,7 +37,7 @@ public class HeadlightsScript : MonoBehaviour {
 	}
 
 	void Update() {
-		if (Input.GetButtonDown("Headlights")) {
+		if (driving.playerControlled && Input.GetButtonDown("Headlights")) {
 			foreach (GameObject light in headlights) {
 				light.SetActive(!light.activeSelf);
 			}
