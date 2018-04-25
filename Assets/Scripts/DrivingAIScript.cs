@@ -12,13 +12,16 @@ public class DrivingAIScript : MonoBehaviour {
 	public float accAmount = 0.2f;
 	public float lookAhead = 0.4f;
 	public float speedLookAhead = 0.3f;
-	public float turnBraking = 1.1f;
+	public float turnBraking = 2f;
+	public float MinTurnBrakingSpeed = 2f;
 
 	Tilemap traffic;
 	Vector3 goal;
 	DrivingScript driving;
 	Rigidbody2D body;
+	LayerMask carMask;
 	float frontDist;
+	float frontAxleDist;
 	string lastDir;
 	bool lastDirWasTurn;
 
@@ -35,18 +38,19 @@ public class DrivingAIScript : MonoBehaviour {
 		traffic = GameObject.Find("Traffic").GetComponent<Tilemap>();
 		driving = GetComponent<DrivingScript>();
 		body = GetComponent<Rigidbody2D>();
+		carMask = LayerMask.GetMask("Cars");
 
-		// frontDist = GetComponent<BoxCollider2D>().size.y / 2; // front of car
-		frontDist = driving.wheelYoff / config.pixelsPerUnit; // front wheels
-		Vector3 front = transform.position + transform.up * frontDist;
-		Vector3 cellCenter = traffic.CellToLocalInterpolated(traffic.WorldToCell(front) +
+		frontDist = GetComponent<BoxCollider2D>().size.y / 2 + 0.1f; // front of car
+		frontAxleDist = driving.wheelYoff / config.pixelsPerUnit; // front wheels
+		Vector3 frontAxle = transform.position + transform.up * frontAxleDist;
+		Vector3 cellCenter = traffic.CellToLocalInterpolated(traffic.WorldToCell(frontAxle) +
 			new Vector3(0.5f, 0.5f, 0));
 		goal = getNextCell(cellCenter);
 	}
 
 	public DrivingActions getDrivingActions() {
-		Vector3 front = transform.position + transform.up * frontDist;
-		Vector3 goalDist = goal - front;
+		Vector3 frontAxle = transform.position + transform.up * frontAxleDist;
+		Vector3 goalDist = goal - frontAxle;
 
 		while (goalDist.magnitude < lookAhead + body.velocity.magnitude * speedLookAhead) {
 			Vector3 nextGoal = getNextCell(goal);
@@ -54,16 +58,22 @@ public class DrivingAIScript : MonoBehaviour {
 				break;
 			}
 			goal = nextGoal;
-			goalDist = goal - front;
+			goalDist = goal - frontAxle;
 		}
+		// Debug.DrawLine(frontAxle, goal, Color.red, Time.deltaTime);
 
 		float thisAngleDiff = Vector3.SignedAngle(transform.up, goalDist, -transform.forward);
-		// Debug.DrawLine(Vector3.zero, goal, Color.red, Time.deltaTime);
-
 		float steer = Mathf.Clamp(thisAngleDiff / driving.maxWheelAngle, -1, 1);
 
+		Vector3 front = transform.position + transform.up * frontDist;
+		RaycastHit2D hit = Physics2D.Linecast(front, goal, carMask);
+
+		Vector3 forwardVelocity = Vector3.Project(body.velocity, transform.up);
+		float brake = Mathf.Abs(steer * turnBraking *
+			Mathf.Max(0, ((forwardVelocity.magnitude - MinTurnBrakingSpeed) / MinTurnBrakingSpeed)));
+
 		return new DrivingActions() {
-			acc = accAmount * (1 - Mathf.Abs(steer * turnBraking)),
+			acc = hit ? 0 : accAmount * (1 - brake),
 			steer = steer,
 		};
 	}

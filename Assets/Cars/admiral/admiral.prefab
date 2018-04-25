@@ -21,11 +21,11 @@ GameObject:
   - component: {fileID: 4206884271618068}
   - component: {fileID: 212731110997680014}
   - component: {fileID: 50836047345841232}
-  - component: {fileID: 114194027232049662}
   - component: {fileID: 61830968233007560}
+  - component: {fileID: 114194027232049662}
   - component: {fileID: 114129915457038298}
   - component: {fileID: 114807688399594396}
-  m_Layer: 0
+  m_Layer: 10
   m_Name: admiral
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -104,7 +104,8 @@ MonoBehaviour:
   accAmount: 0.2
   lookAhead: 0.4
   speedLookAhead: 0.3
-  turnBraking: 1.1
+  turnBraking: 2
+  MinTurnBrakingSpeed: 2
 --- !u!114 &114194027232049662
 MonoBehaviour:
   m_ObjectHideFlags: 1

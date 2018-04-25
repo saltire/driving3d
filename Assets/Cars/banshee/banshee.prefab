@@ -21,11 +21,11 @@ GameObject:
   - component: {fileID: 4543688843018346}
   - component: {fileID: 212969123440292176}
   - component: {fileID: 50041793180559396}
-  - component: {fileID: 114074336886289340}
   - component: {fileID: 61191231390293242}
-  - component: {fileID: 114692735754217250}
+  - component: {fileID: 114074336886289340}
   - component: {fileID: 114898511604266048}
-  m_Layer: 0
+  - component: {fileID: 114692735754217250}
+  m_Layer: 10
   m_Name: banshee
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -149,10 +149,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 2e8bd99bde9230b408ec8d7da70fdaca, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  accAmount: 0.4
+  accAmount: 0.8
   lookAhead: 0.4
   speedLookAhead: 0.3
-  turnBraking: 1.1
+  turnBraking: 2
+  MinTurnBrakingSpeed: 2
 --- !u!212 &212969123440292176
 SpriteRenderer:
   m_ObjectHideFlags: 1

@@ -56,7 +56,7 @@ GameObject:
   - component: {fileID: 114502233818541656}
   - component: {fileID: 61533545914552990}
   - component: {fileID: 114571865174987416}
-  m_Layer: 0
+  m_Layer: 10
   m_Name: astonmartin
   m_TagString: Untagged
   m_Icon: {fileID: 0}
