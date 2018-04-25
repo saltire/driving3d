@@ -12,20 +12,20 @@ public class DrivingScript : MonoBehaviour {
 	public float brakeResistance = 15;     // handbrake friction
 
 	// these values will largely depends on the density of the car
-	public float engineAcc = 14;           // forward force, moving forward
-	public float engineBrk = 16;           // braking force
-	public float engineRev = 10;           // reverse force, moving backward
+	public float engineAcc = 35;           // forward force, moving forward
+	public float engineBrk = 50;           // braking force
+	public float engineRev = 20;           // reverse force, moving backward
 
-	public float wheelXoff = 14;           // relative x position of wheel in pixels
+	public float wheelXoff = 12;           // relative x position of wheel in pixels
 	public float wheelYoff = 13;           // relative y position of wheel in pixels
-	public float maxWheelAngle = 30;       // the maximum angle the wheel can rotate
+	public float maxWheelAngle = 35;       // the maximum angle the wheel can rotate
 	public float wheelAngleVelocity = 5;   // how quickly a wheel rotates in degrees per frame
-	public float wheelMotorSpeed = 100;
+	public float wheelMotorSpeed = 200;
 
-	public float steerTorque = 5;          // extra torque on the car when turning (multiplied by speed)
-	public float maxSteerTorque = 20;      // max amount of extra steering torque
+	public float steerTorque = 15;         // extra torque on the car when turning (multiplied by speed)
+	public float maxSteerTorque = 25;      // max amount of extra steering torque
 	public float brakeTorque = 8;          // extra torque when handbraking
-	public float torqueDamp = 0.75f;       // how quickly the car will straighten when not turning
+	public float torqueDamp = 0.1f;       // how quickly the car will straighten when not turning
 
 	public float driftControl = 0.5f;      // drift control, usually between (0-1) but can be higher
 

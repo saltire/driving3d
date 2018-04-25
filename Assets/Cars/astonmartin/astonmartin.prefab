@@ -54,6 +54,7 @@ GameObject:
   - component: {fileID: 212432859786527110}
   - component: {fileID: 50136953793622266}
   - component: {fileID: 114502233818541656}
+  - component: {fileID: 114903859859181042}
   - component: {fileID: 61533545914552990}
   - component: {fileID: 114571865174987416}
   m_Layer: 10
@@ -395,7 +396,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d66c13a844cb58049985fa4dc499544d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  playerControlled: 1
+  playerControlled: 0
   frontWheelDrive: 1
   airResistance: 0.2
   rollingResistance: 1.5
@@ -408,8 +409,8 @@ MonoBehaviour:
   maxWheelAngle: 35
   wheelAngleVelocity: 5
   wheelMotorSpeed: 200
-  steerTorque: 5
-  maxSteerTorque: 20
+  steerTorque: 15
+  maxSteerTorque: 25
   brakeTorque: 8
   torqueDamp: 0.1
   driftControl: 0.5
@@ -445,6 +446,22 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   speed: 10
   startOn: 1
+--- !u!114 &114903859859181042
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1649190991275320}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 2e8bd99bde9230b408ec8d7da70fdaca, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  accAmount: 0.8
+  lookAhead: 0.4
+  speedLookAhead: 0.3
+  turnBraking: 2
+  MinTurnBrakingSpeed: 2
 --- !u!212 &212432859786527110
 SpriteRenderer:
   m_ObjectHideFlags: 1
