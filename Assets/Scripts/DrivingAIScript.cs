@@ -19,8 +19,10 @@ public class DrivingAIScript : MonoBehaviour {
 	DrivingScript driving;
 	Rigidbody2D body;
 	float frontDist;
+	string lastDir;
+	bool lastDirWasTurn;
 
-	Dictionary<string, Vector3> dirs = new Dictionary<string, Vector3>() {
+	Dictionary<string, Vector3> dirVectors = new Dictionary<string, Vector3>() {
 		{ "north", Vector3.up },
 		{ "south", Vector3.down },
 		{ "west", Vector3.left },
@@ -67,10 +69,29 @@ public class DrivingAIScript : MonoBehaviour {
 	}
 
 	Vector3 getNextCell(Vector3 currentCell) {
-		TileBase goalTile = traffic.GetTile(traffic.WorldToCell(currentCell));
-		if (goalTile == null || goalTile.name == null) {
+		TileBase currentTile = traffic.GetTile(traffic.WorldToCell(currentCell));
+		if (currentTile == null || currentTile.name == null) {
 			return currentCell;
 		}
-		return currentCell + dirs[goalTile.name];
+		string[] dirs = currentTile.name.Split(',');
+
+		// Pick a direction at random from the dirs available on this tile.
+		// Avoid taking two turns in a row if possible.
+		// If a dir has a ! after it, it can only be taken if it matches the last dir.
+		string dir;
+		bool mustMatch;
+		do {
+			dir = dirs[Random.Range(0, dirs.Length)];
+			mustMatch = dir.Contains("!");
+			if (mustMatch) {
+				dir = dir.Remove(dir.Length - 1);
+			}
+		}
+		while ((dirs.Length > 1 && lastDirWasTurn && dir != lastDir) ||
+			(mustMatch && dir != lastDir));
+
+		lastDirWasTurn = lastDir != dir;
+		lastDir = dir;
+		return currentCell + dirVectors[dir];
 	}
 }
