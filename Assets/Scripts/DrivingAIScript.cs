@@ -32,7 +32,7 @@ public class DrivingAIScript : MonoBehaviour {
 		{ "east", Vector3.right },
 	};
 
-	void Start() {
+	void Awake() {
 		ConfigScript config = (ConfigScript)Object.FindObjectOfType(typeof(ConfigScript));
 
 		traffic = GameObject.Find("Traffic").GetComponent<Tilemap>();

@@ -24,9 +24,10 @@ GameObject:
   - component: {fileID: 61118445604930342}
   - component: {fileID: 114475734304062270}
   - component: {fileID: 114876891338658542}
+  - component: {fileID: 114075378048306298}
   m_Layer: 10
   m_Name: yosemite
-  m_TagString: Untagged
+  m_TagString: Car
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -37,13 +38,13 @@ Transform:
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 1550692676629960}
-  m_LocalRotation: {x: 0, y: 0, z: 1, w: 0}
-  m_LocalPosition: {x: -0.5, y: 2.5, z: 0}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 0}
   m_RootOrder: 0
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 180}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!50 &50223385875826174
 Rigidbody2D:
   serializedVersion: 4
@@ -76,7 +77,7 @@ BoxCollider2D:
   m_IsTrigger: 0
   m_UsedByEffector: 0
   m_UsedByComposite: 0
-  m_Offset: {x: 0, y: 0}
+  m_Offset: {x: 0, y: -0.015}
   m_SpriteTilingProperty:
     border: {x: 0, y: 0, z: 0, w: 0}
     pivot: {x: 0.5, y: 0.5}
@@ -89,6 +90,23 @@ BoxCollider2D:
   serializedVersion: 2
   m_Size: {x: 0.4, y: 0.9}
   m_EdgeRadius: 0
+--- !u!114 &114075378048306298
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1550692676629960}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a64ca32eaae57e944bf6876d82686b95, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  headlightPrefab: {fileID: 1046675780958622, guid: 89028038717103b4aa97c85af2836174,
+    type: 2}
+  xOffset: 9
+  yOffset: 27
+  angle: 10
+  startOn: 1
 --- !u!114 &114475734304062270
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -108,8 +126,8 @@ MonoBehaviour:
   engineAcc: 35
   engineBrk: 50
   engineRev: 20
-  wheelXoff: 14
-  wheelYoff: 13
+  wheelXoff: 13
+  wheelYoff: 18
   maxWheelAngle: 35
   wheelAngleVelocity: 5
   wheelMotorSpeed: 200
@@ -131,7 +149,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 2e8bd99bde9230b408ec8d7da70fdaca, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  accAmount: 0.2
+  accAmount: 0.4
   lookAhead: 0.4
   speedLookAhead: 0.3
   turnBraking: 2
