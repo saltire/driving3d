@@ -19,10 +19,14 @@ public class CameraFollowScript : MonoBehaviour {
 		DrivingScript[] cars = Component.FindObjectsOfType<DrivingScript>();
 		DrivingScript playerCar = Array.Find<DrivingScript>(cars, c => c.playerControlled);
 		if (playerCar) {
-			target = playerCar.transform;
-			transform.position = target.position + heightDistance;
-			lastTargetPosition = target.position;
+			SetPlayerCar(playerCar);
 		}
+	}
+
+	public void SetPlayerCar(DrivingScript playerCar) {
+		target = playerCar.transform;
+		transform.position = target.position + heightDistance;
+		lastTargetPosition = target.position;
 	}
 
 	void FixedUpdate() {

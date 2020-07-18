@@ -9,7 +9,7 @@ public class CarSpawnerScript : MonoBehaviour {
 	public int minSpawnMargin = 2;
 	public int maxSpawnMargin = 7;
 	public float clearRadius = 3;
-	public GameObject[] carPrefabs;
+	public DrivingScript[] carPrefabs;
 
 	Vector3 halfCell = new Vector3(0.5f, 0.5f, 0);
 	List<string> dirs = new List<string>(new string[] { "north", "west", "south", "east" });
@@ -29,9 +29,11 @@ public class CarSpawnerScript : MonoBehaviour {
 
 		margin = new Vector3(maxSpawnMargin, maxSpawnMargin, 0);
 
-		BoundsInt outerCellBounds = getOuterCellBounds();
-		spawnCars(outerCellBounds);
-		removeCars(outerCellBounds);
+		SpawnPlayer();
+
+		BoundsInt outerCellBounds = GetOuterCellBounds();
+		SpawnCars(outerCellBounds);
+		RemoveCars(outerCellBounds);
 	}
 
 	void Update() {
@@ -39,13 +41,13 @@ public class CarSpawnerScript : MonoBehaviour {
 		if (elapsed >= interval) {
 			elapsed -= interval;
 
-			BoundsInt outerCellBounds = getOuterCellBounds();
-			spawnCars(outerCellBounds);
-			removeCars(outerCellBounds);
+			BoundsInt outerCellBounds = GetOuterCellBounds();
+			SpawnCars(outerCellBounds);
+			RemoveCars(outerCellBounds);
 		}
 	}
 
-	BoundsInt getOuterCellBounds() {
+	BoundsInt GetOuterCellBounds() {
 		Vector3 cameraMin = cam.ViewportToWorldPoint(new Vector3(0, 0, height));
 		Vector3 cameraMax = cam.ViewportToWorldPoint(new Vector3(1, 1, height));
 
@@ -63,7 +65,16 @@ public class CarSpawnerScript : MonoBehaviour {
 		return outerBounds;
 	}
 
-	void spawnCars(BoundsInt outerBoundsInt) {
+  void SpawnPlayer() {
+    DrivingScript carPrefab = carPrefabs[Random.Range(0, carPrefabs.Length)];
+    DrivingScript playerCar = Instantiate(carPrefab,
+      transform.position + new Vector3(0, 0, carPrefab.transform.position.z), transform.rotation);
+
+    playerCar.playerControlled = true;
+		FindObjectOfType<CameraFollowScript>().SetPlayerCar(playerCar);
+  }
+
+	void SpawnCars(BoundsInt outerBoundsInt) {
 		TileBase[] tiles = traffic.GetTilesBlock(outerBoundsInt);
 		int marginWidth = maxSpawnMargin - minSpawnMargin;
 		int farMarginX = outerBoundsInt.size.x - marginWidth;
@@ -83,7 +94,7 @@ public class CarSpawnerScript : MonoBehaviour {
 					int dir = tile == null ? -1 : dirs.IndexOf(tile.name);
 
 					if (dir > -1 && Physics2D.OverlapCircle(point, clearRadius, layerMask) == null) {
-						GameObject car = carPrefabs[Random.Range(0, carPrefabs.Length)];
+						DrivingScript car = carPrefabs[Random.Range(0, carPrefabs.Length)];
 						Instantiate(car, point + new Vector3(0, 0, car.transform.position.z),
 							Quaternion.Euler(0, 0, 90 * dir), transform);
 
@@ -94,7 +105,7 @@ public class CarSpawnerScript : MonoBehaviour {
 		}
 	}
 
-	void removeCars(BoundsInt outerCellBounds) {
+	void RemoveCars(BoundsInt outerCellBounds) {
 		Bounds outerBounds = GetOuterBounds(outerCellBounds);
 
 		foreach (GameObject car in GameObject.FindGameObjectsWithTag("Car")) {
