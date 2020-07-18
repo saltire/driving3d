@@ -148,7 +148,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d66c13a844cb58049985fa4dc499544d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  playerControlled: 1
+  playerControlled: 0
   frontWheelDrive: 1
   airResistance: 0.2
   rollingResistance: 1.5

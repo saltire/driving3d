@@ -84,8 +84,8 @@ public class CarSpawnerScript : MonoBehaviour {
 
 					if (dir > -1 && Physics2D.OverlapCircle(point, clearRadius, layerMask) == null) {
 						GameObject car = carPrefabs[Random.Range(0, carPrefabs.Length)];
-						Instantiate(car, point + car.transform.position, Quaternion.Euler(0, 0, 90 * dir),
-							transform);
+						Instantiate(car, point + new Vector3(0, 0, car.transform.position.z),
+							Quaternion.Euler(0, 0, 90 * dir), transform);
 
 						carCount += 1;
 					}
