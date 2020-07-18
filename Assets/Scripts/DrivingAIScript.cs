@@ -41,19 +41,19 @@ public class DrivingAIScript : MonoBehaviour {
 		carMask = LayerMask.GetMask("Cars");
 
 		frontDist = GetComponent<BoxCollider2D>().size.y / 2 + 0.1f; // front of car
-		frontAxleDist = driving.wheelYoff / config.pixelsPerUnit; // front wheels
+		frontAxleDist = driving.frontWheelOffset.localPosition.y / config.pixelsPerUnit; // front wheels
 		Vector3 frontAxle = transform.position + transform.up * frontAxleDist;
 		Vector3 cellCenter = traffic.CellToLocalInterpolated(traffic.WorldToCell(frontAxle) +
 			new Vector3(0.5f, 0.5f, 0));
-		goal = getNextCell(cellCenter);
+		goal = GetNextCell(cellCenter);
 	}
 
-	public DrivingActions getDrivingActions() {
+	public DrivingActions GetDrivingActions() {
 		Vector3 frontAxle = transform.position + transform.up * frontAxleDist;
 		Vector3 goalDist = goal - frontAxle;
 
 		while (goalDist.magnitude < lookAhead + body.velocity.magnitude * speedLookAhead) {
-			Vector3 nextGoal = getNextCell(goal);
+			Vector3 nextGoal = GetNextCell(goal);
 			if (nextGoal == goal) {
 				break;
 			}
@@ -78,7 +78,7 @@ public class DrivingAIScript : MonoBehaviour {
 		};
 	}
 
-	Vector3 getNextCell(Vector3 currentCell) {
+	Vector3 GetNextCell(Vector3 currentCell) {
 		TileBase currentTile = traffic.GetTile(traffic.WorldToCell(currentCell));
 		if (currentTile == null || currentTile.name == null) {
 			return currentCell;

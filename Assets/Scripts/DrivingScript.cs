@@ -16,8 +16,8 @@ public class DrivingScript : MonoBehaviour {
 	public float engineBrk = 50;           // braking force
 	public float engineRev = 20;           // reverse force, moving backward
 
-	public float wheelXoff = 12;           // relative x position of wheel in pixels
-	public float wheelYoff = 13;           // relative y position of wheel in pixels
+	public Transform frontWheelOffset;     // relative position of one of the front wheels
+	public Transform backWheelOffset;      // relative position of one of the back wheels
 	public float maxWheelAngle = 35;       // the maximum angle the wheel can rotate
 	public float wheelAngleVelocity = 5;   // how quickly a wheel rotates in degrees per frame
 	public float wheelMotorSpeed = 200;
@@ -48,18 +48,21 @@ public class DrivingScript : MonoBehaviour {
 		ConfigScript config = (ConfigScript)Object.FindObjectOfType(typeof(ConfigScript));
 		ppu = config.pixelsPerUnit;
 
+		Vector3 frontWheelPos = frontWheelOffset.localPosition;
+		Vector3 backWheelPos = backWheelOffset.localPosition;
+
 		wheels = new Wheel[] {
-			addWheel(-wheelXoff, wheelYoff, frontWheelDrive, true, false),
-			addWheel(wheelXoff, wheelYoff, frontWheelDrive, true, false),
-			addWheel(-wheelXoff, -wheelYoff, !frontWheelDrive, false, true),
-			addWheel(wheelXoff, -wheelYoff, !frontWheelDrive, false, true),
+			AddWheel(frontWheelPos.x, frontWheelPos.y, frontWheelDrive, true, false),
+			AddWheel(-frontWheelPos.x, frontWheelPos.y, frontWheelDrive, true, false),
+			AddWheel(backWheelPos.x, backWheelPos.y, !frontWheelDrive, false, true),
+			AddWheel(-backWheelPos.x, backWheelPos.y, !frontWheelDrive, false, true),
 		};
 
 		body = GetComponent<Rigidbody2D>();
 		ai = GetComponent<DrivingAIScript>();
 	}
 
-	Wheel addWheel(float xoff, float yoff, bool powered, bool rotatable, bool handbrake) {
+	Wheel AddWheel(float xoff, float yoff, bool powered, bool rotatable, bool handbrake) {
 		Wheel wheel = new Wheel {
 			obj = (GameObject)Instantiate(wheelPrefab, transform),
 			powered = powered,
@@ -67,7 +70,7 @@ public class DrivingScript : MonoBehaviour {
 			handbrake = handbrake,
 		};
 
-		wheel.obj.transform.localPosition += new Vector3(xoff / ppu, yoff / ppu, 0);
+		wheel.obj.transform.localPosition += new Vector3(xoff, yoff, 0);
 
 		if (rotatable) {
 			HingeJoint2D hingeJoint = wheel.obj.AddComponent<HingeJoint2D>();
@@ -95,7 +98,7 @@ public class DrivingScript : MonoBehaviour {
 			brake = Input.GetAxisRaw("Handbrake");
 		}
 		else if (ai != null) {
-			DrivingActions actions = ai.getDrivingActions();
+			DrivingActions actions = ai.GetDrivingActions();
 			acc = actions.acc;
 			steer = actions.steer;
 		}
@@ -119,7 +122,7 @@ public class DrivingScript : MonoBehaviour {
 
 			// set the rotation(angle) for the rotatable wheels
 			if (wheel.rotatable) {
-				float currentAngle = getCurrentAngle(wheel.obj.transform);
+				float currentAngle = GetCurrentAngle(wheel.obj.transform);
 				float angleDiff = steerDir - currentAngle;
 
 				HingeJoint2D joint = wheel.obj.GetComponent<HingeJoint2D>();
@@ -158,11 +161,11 @@ public class DrivingScript : MonoBehaviour {
 			}
 
 			// kill sideways speed of wheel
-			killSidewaysSpeed(wheel.obj);
+			KillSidewaysSpeed(wheel.obj);
 		}
 
 		// kill sideways speed of car
-		killSidewaysSpeed(gameObject);
+		KillSidewaysSpeed(gameObject);
 
 		// add extra torque when steering, to make up for angular drag
 		float torque = (movingForward ? -1 : 1) * steer *
@@ -189,7 +192,7 @@ public class DrivingScript : MonoBehaviour {
 		// drawVector(transform, body.velocity, Color.green);
 	}
 
-	void killSidewaysSpeed(GameObject obj) {
+	void KillSidewaysSpeed(GameObject obj) {
 		Rigidbody2D body = obj.GetComponent<Rigidbody2D>();
 
 		// project velocity to the axis and return the magnitude
@@ -206,7 +209,7 @@ public class DrivingScript : MonoBehaviour {
 		body.velocity -= sideVelocity;
 	}
 
-	static float getCurrentAngle(Transform transform) {
+	static float GetCurrentAngle(Transform transform) {
 		float currentAngle = (360 - transform.localEulerAngles.z) % 360;
 		if (currentAngle > 180) {
 			currentAngle -= 360;
@@ -214,7 +217,7 @@ public class DrivingScript : MonoBehaviour {
 		return currentAngle;
 	}
 
-	static void drawVector(Transform transform, Vector2 vector, Color color) {
+	static void DrawVector(Transform transform, Vector2 vector, Color color) {
 		Debug.DrawLine(transform.position,
 			transform.position + (Vector3)vector, color, Time.deltaTime, false);
 	}
