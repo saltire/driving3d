@@ -14,7 +14,7 @@ public class CarColorScript : MonoBehaviour {
 		Color.RGBToHSV(baseColor, out bh, out bs, out bv);
 
 		// Pick a random alt color; include -1 as an option to keep the base color.
-		int index = Random.Range(-1, altColors.Length);
+		int index = Random.Range(0, altColors.Length);
 		if (index == -1) {
 			return;
 		}
@@ -41,15 +41,17 @@ public class CarColorScript : MonoBehaviour {
 				float h, s, v;
 				Color.RGBToHSV(pixels[i], out h, out s, out v);
 
-				float diff = Mathf.Abs(bh - h);
-				if (diff > .5f) {
-					diff = 1 - diff;
-				}
+				if (s > 0) {
+					float diff = Mathf.Abs(bh - h);
+					if (diff > .5f) {
+						diff = 1 - diff;
+					}
 
-				if (diff < hueThreshold) {
-					Color newPixel = Color.HSVToRGB(nh, s, v);
-					newPixel.a = pixels[i].a;
-					pixels[i] = newPixel;
+					if (diff < hueThreshold) {
+						Color newPixel = Color.HSVToRGB(nh, ns, nv * v);
+						newPixel.a = pixels[i].a;
+						pixels[i] = newPixel;
+					}
 				}
 			}
 		}
