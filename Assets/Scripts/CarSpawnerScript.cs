@@ -10,6 +10,7 @@ public class CarSpawnerScript : MonoBehaviour {
 	public int maxSpawnMargin = 7;
 	public float clearRadius = 3;
 	public DrivingScript[] carPrefabs;
+	public DrivingScript playerCar;
 
 	Vector3 halfCell = new Vector3(0.5f, 0.5f, 0);
 	List<string> dirs = new List<string>(new string[] { "north", "west", "south", "east" });
@@ -21,6 +22,11 @@ public class CarSpawnerScript : MonoBehaviour {
 	Vector3 margin;
 	float elapsed = 0;
 
+	void Awake() 
+	{
+		SpawnPlayer();
+	}
+
 	void Start() {
 		cam = Camera.main;
 		height = cam.GetComponent<CameraFollowScript>().height;
@@ -29,7 +35,7 @@ public class CarSpawnerScript : MonoBehaviour {
 
 		margin = new Vector3(maxSpawnMargin, maxSpawnMargin, 0);
 
-		SpawnPlayer();
+		//SpawnPlayer();
 
 		BoundsInt outerCellBounds = GetOuterCellBounds();
 		SpawnCars(outerCellBounds);
@@ -65,14 +71,13 @@ public class CarSpawnerScript : MonoBehaviour {
 		return outerBounds;
 	}
 
-  void SpawnPlayer() {
-    DrivingScript carPrefab = carPrefabs[Random.Range(0, carPrefabs.Length)];
-    DrivingScript playerCar = Instantiate(carPrefab,
-      transform.position + new Vector3(0, 0, carPrefab.transform.position.z), transform.rotation);
+	void SpawnPlayer() {
+		DrivingScript carPrefab = carPrefabs[Random.Range(0, carPrefabs.Length)];
+		playerCar = Instantiate(carPrefab, transform.position + new Vector3(0, 0, carPrefab.transform.position.z), transform.rotation);
 
-    playerCar.playerControlled = true;
-		FindObjectOfType<CameraFollowScript>().SetPlayerCar(playerCar);
-  }
+		playerCar.playerControlled = true;
+			FindObjectOfType<CameraFollowScript>().SetPlayerCar(playerCar);
+	}
 
 	void SpawnCars(BoundsInt outerBoundsInt) {
 		TileBase[] tiles = traffic.GetTilesBlock(outerBoundsInt);
