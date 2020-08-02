@@ -5,6 +5,12 @@ TagManager:
   serializedVersion: 2
   tags:
   - Car
+  - zombie
+  - pedestrian
+  - soldier
+  - bullet
+  - laser
+  - explosion
   layers:
   - Default
   - TransparentFX
@@ -17,7 +23,7 @@ TagManager:
   - Buildings
   - Tiles
   - Cars
-  - 
+  - Pedestrians
   - 
   - 
   - 

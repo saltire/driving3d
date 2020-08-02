@@ -43,7 +43,7 @@ public class flash : MonoBehaviour
         if(col.tag == "soldier") {
             FlashRed();
             this.transform.SendMessage("Damage", dmg);
-        }        
+        }             
     } 
 
     void OnTriggerStay2D(Collider2D col)
