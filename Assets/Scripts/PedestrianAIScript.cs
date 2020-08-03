@@ -9,6 +9,10 @@ public class PedestrianAIScript : MonoBehaviour {
 
 	public float moveSpeed = 3f;
 
+	private float oldPosition;
+
+	public SpriteRenderer thisRenderer;
+
 	Tilemap traffic;
 	Vector3 goal;
 	PedestrianScript walking;
@@ -36,6 +40,23 @@ public class PedestrianAIScript : MonoBehaviour {
 		Vector3 cellCenter = traffic.CellToLocalInterpolated(traffic.WorldToCell(frontSide) +
 			new Vector3(0.5f, 0.5f, 0));
 		goal = GetNextCell(cellCenter);
+	}
+
+	void Start() {
+		oldPosition = transform.position.x;
+	}
+
+	void Update() {
+        if (transform.position.x > oldPosition) // he's looking right
+        {
+            thisRenderer.flipX = false;
+        }
+ 
+        if (transform.position.x < oldPosition) // he's looking left
+        {
+            thisRenderer.flipX = true;
+        }
+        oldPosition = transform.position.x; // update the variable with the new position so we can chack against it next frame		
 	}
 
 	public void GetWalkingActions() {

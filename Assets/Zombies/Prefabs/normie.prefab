@@ -15,10 +15,10 @@ GameObject:
   - component: {fileID: 6614213287842399275}
   - component: {fileID: 6614213287842399279}
   - component: {fileID: 6614213287842399278}
-  - component: {fileID: 4550446830558333284}
-  - component: {fileID: 4350819317142871498}
   - component: {fileID: 5406081642858892189}
   - component: {fileID: 7728249386974194142}
+  - component: {fileID: 4350819317142871498}
+  - component: {fileID: 4550446830558333284}
   m_Layer: 11
   m_Name: normie
   m_TagString: pedestrian
@@ -279,35 +279,6 @@ AudioSource:
     m_PreInfinity: 2
     m_PostInfinity: 2
     m_RotationOrder: 4
---- !u!114 &4550446830558333284
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 6614213287842399284}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 24959e4d147d4204584cba2b6c4503af, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  playerControlled: 0
-  moveSpeed: 0.1
---- !u!114 &4350819317142871498
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 6614213287842399284}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: d1a373b2cf20c584390f60f75906220f, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  lookAhead: 0.4
-  speedLookAhead: 0.3
-  moveSpeed: 3
 --- !u!114 &5406081642858892189
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -343,3 +314,33 @@ MonoBehaviour:
   thisRenderer: {fileID: 6614213287842399266}
   blood: {fileID: 4025565184072064533, guid: cd78591cd22bff04e9b270c2316f7fb6, type: 3}
   dmg: 45
+--- !u!114 &4350819317142871498
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6614213287842399284}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d1a373b2cf20c584390f60f75906220f, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  lookAhead: 0.4
+  speedLookAhead: 0.3
+  moveSpeed: 1.5
+  thisRenderer: {fileID: 6614213287842399266}
+--- !u!114 &4550446830558333284
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6614213287842399284}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 24959e4d147d4204584cba2b6c4503af, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  playerControlled: 0
+  moveSpeed: 0.1

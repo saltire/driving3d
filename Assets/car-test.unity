@@ -5558,7 +5558,7 @@ Transform:
   - {fileID: 407696526}
   - {fileID: 1206882485}
   m_Father: {fileID: 0}
-  m_RootOrder: 8
+  m_RootOrder: 9
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!4 &461040800 stripped
 Transform:
@@ -16609,7 +16609,7 @@ Transform:
   - {fileID: 770396802}
   - {fileID: 66420253}
   m_Father: {fileID: 0}
-  m_RootOrder: 9
+  m_RootOrder: 10
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!4 &764210365 stripped
 Transform:
@@ -17330,7 +17330,7 @@ Transform:
   - {fileID: 546380662}
   - {fileID: 921091567}
   m_Father: {fileID: 0}
-  m_RootOrder: 10
+  m_RootOrder: 11
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &917899633
 GameObject:
@@ -19224,8 +19224,8 @@ Tilemap:
   m_TileObjectToInstantiateArray: []
   m_AnimationFrameRate: 1
   m_Color: {r: 1, g: 1, b: 1, a: 1}
-  m_Origin: {x: -15, y: -15, z: 0}
-  m_Size: {x: 30, y: 32, z: 1}
+  m_Origin: {x: -17, y: -17, z: 0}
+  m_Size: {x: 34, y: 34, z: 1}
   m_TileAnchor: {x: 0.5, y: 0.5, z: 0}
   m_TileOrientation: 0
   m_TileOrientationMatrix:
@@ -34348,7 +34348,7 @@ Transform:
   - {fileID: 158620235}
   - {fileID: 526862825}
   m_Father: {fileID: 0}
-  m_RootOrder: 7
+  m_RootOrder: 8
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1001 &1545554099
 PrefabInstance:
@@ -34536,7 +34536,7 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 0}
-  m_RootOrder: 11
+  m_RootOrder: 7
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!4 &1618044407 stripped
 Transform:
