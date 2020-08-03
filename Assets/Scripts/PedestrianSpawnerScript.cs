@@ -22,7 +22,7 @@ public class PedestrianSpawnerScript : MonoBehaviour {
 	Vector3 margin;
 	float elapsed = 0;
 
-	void Awake() 
+	void Awake()
 	{
 		//SpawnPlayer();
 	}
@@ -105,7 +105,7 @@ public class PedestrianSpawnerScript : MonoBehaviour {
 	void RemovePedestrians(BoundsInt outerCellBounds) {
 		Bounds outerBounds = GetOuterBounds(outerCellBounds);
 
-		foreach (GameObject car in GameObject.FindGameObjectsWithTag("Car")) {
+		foreach (GameObject car in GameObject.FindGameObjectsWithTag("pedestrian")) {
 			if (!outerBounds.Contains(
 				new Vector3(car.transform.position.x, car.transform.position.y, 0))) {
 				Destroy(car);
