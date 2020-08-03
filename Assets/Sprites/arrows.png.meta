@@ -74,6 +74,18 @@ TextureImporter:
   - first:
       213: 21300046
     second: west!,north
+  - first:
+      213: -2429919002490121231
+    second: north!,east!
+  - first:
+      213: 67926103340967526
+    second: east!,south!
+  - first:
+      213: -2938970880757876879
+    second: south!,west!
+  - first:
+      213: 5635105361348811957
+    second: west!,north!
   externalObjects: {}
   serializedVersion: 11
   mipmaps:
@@ -175,7 +187,7 @@ TextureImporter:
       rect:
         serializedVersion: 2
         x: 0
-        y: 45
+        y: 60
         width: 15
         height: 15
       alignment: 0
@@ -196,7 +208,7 @@ TextureImporter:
       rect:
         serializedVersion: 2
         x: 15
-        y: 45
+        y: 60
         width: 15
         height: 15
       alignment: 0
@@ -217,7 +229,7 @@ TextureImporter:
       rect:
         serializedVersion: 2
         x: 30
-        y: 45
+        y: 60
         width: 15
         height: 15
       alignment: 0
@@ -238,7 +250,7 @@ TextureImporter:
       rect:
         serializedVersion: 2
         x: 45
-        y: 45
+        y: 60
         width: 15
         height: 15
       alignment: 0
@@ -259,7 +271,7 @@ TextureImporter:
       rect:
         serializedVersion: 2
         x: 0
-        y: 30
+        y: 45
         width: 15
         height: 15
       alignment: 0
@@ -280,7 +292,7 @@ TextureImporter:
       rect:
         serializedVersion: 2
         x: 15
-        y: 30
+        y: 45
         width: 15
         height: 15
       alignment: 0
@@ -301,7 +313,7 @@ TextureImporter:
       rect:
         serializedVersion: 2
         x: 30
-        y: 30
+        y: 45
         width: 15
         height: 15
       alignment: 0
@@ -322,7 +334,7 @@ TextureImporter:
       rect:
         serializedVersion: 2
         x: 45
-        y: 30
+        y: 45
         width: 15
         height: 15
       alignment: 0
@@ -343,7 +355,7 @@ TextureImporter:
       rect:
         serializedVersion: 2
         x: 0
-        y: 15
+        y: 30
         width: 15
         height: 15
       alignment: 0
@@ -364,7 +376,7 @@ TextureImporter:
       rect:
         serializedVersion: 2
         x: 15
-        y: 15
+        y: 30
         width: 15
         height: 15
       alignment: 0
@@ -385,7 +397,7 @@ TextureImporter:
       rect:
         serializedVersion: 2
         x: 30
-        y: 15
+        y: 30
         width: 15
         height: 15
       alignment: 0
@@ -406,7 +418,7 @@ TextureImporter:
       rect:
         serializedVersion: 2
         x: 45
-        y: 15
+        y: 30
         width: 15
         height: 15
       alignment: 0
@@ -427,7 +439,7 @@ TextureImporter:
       rect:
         serializedVersion: 2
         x: 0
-        y: 0
+        y: 15
         width: 15
         height: 15
       alignment: 0
@@ -448,7 +460,7 @@ TextureImporter:
       rect:
         serializedVersion: 2
         x: 15
-        y: 0
+        y: 15
         width: 15
         height: 15
       alignment: 0
@@ -469,7 +481,7 @@ TextureImporter:
       rect:
         serializedVersion: 2
         x: 30
-        y: 0
+        y: 15
         width: 15
         height: 15
       alignment: 0
@@ -490,7 +502,7 @@ TextureImporter:
       rect:
         serializedVersion: 2
         x: 45
-        y: 0
+        y: 15
         width: 15
         height: 15
       alignment: 0
@@ -506,10 +518,94 @@ TextureImporter:
       indices: 
       edges: []
       weights: []
+    - serializedVersion: 2
+      name: north!,east!
+      rect:
+        serializedVersion: 2
+        x: 0
+        y: 0
+        width: 15
+        height: 15
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 1f3da9f9a81374ed0800000000000000
+      internalID: -2429919002490121231
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: east!,south!
+      rect:
+        serializedVersion: 2
+        x: 15
+        y: 0
+        width: 15
+        height: 15
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 6666d9c5e6251f000800000000000000
+      internalID: 67926103340967526
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: south!,west!
+      rect:
+        serializedVersion: 2
+        x: 30
+        y: 0
+        width: 15
+        height: 15
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 177b5372e8da637d0800000000000000
+      internalID: -2938970880757876879
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: west!,north!
+      rect:
+        serializedVersion: 2
+        x: 45
+        y: 0
+        width: 15
+        height: 15
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 5bc5817587ae33e40800000000000000
+      internalID: 5635105361348811957
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
     outline: []
     physicsShape: []
     bones: []
-    spriteID: 
+    spriteID: 8f51d56e92c6ba948ab91b70cb42dc8a
     internalID: 0
     vertices: []
     indices: 
