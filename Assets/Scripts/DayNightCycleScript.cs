@@ -24,7 +24,7 @@ public class DayNightCycleScript : MonoBehaviour {
         dayLength = 1440;
         dayStart = 300;
         nightStart = 1200;
-        currentTime = 720;
+        currentTime = 1200;
         StartCoroutine (TimeOfDay());
 
         sunlight = GetComponent<Light>();
