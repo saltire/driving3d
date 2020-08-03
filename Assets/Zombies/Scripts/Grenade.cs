@@ -23,7 +23,7 @@ public class Grenade : MonoBehaviour
 
     void Update ()
     {
-        bool grenadeyAttack = Input.GetButton ("GrenadeAttack");
+        bool grenadeAttack = Input.GetButton ("GrenadeAttack");
 
         if (Input.GetButton("GrenadeAttack"))
         {

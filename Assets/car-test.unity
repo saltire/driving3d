@@ -34099,6 +34099,7 @@ GameObject:
   m_Component:
   - component: {fileID: 1477501184}
   - component: {fileID: 1477501185}
+  - component: {fileID: 1477501186}
   m_Layer: 0
   m_Name: Sunlight
   m_TagString: Untagged
@@ -34181,6 +34182,20 @@ Light:
   m_UseBoundingSphereOverride: 0
   m_ShadowRadius: 0
   m_ShadowAngle: 0
+--- !u!114 &1477501186
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1477501183}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 7a1889d0799ee514195fbb7351d39810, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  cycleSpeed: 50
+  sunriseDuration: 5
 --- !u!1 &1490558118
 GameObject:
   m_ObjectHideFlags: 0
