@@ -4,7 +4,7 @@ using UnityEngine;
 using UnityEngine.Tilemaps;
 
 public class PedestrianSpawnerScript : MonoBehaviour {
-	public int targetCarCount = 5;
+	public int targetCount = 5;
 	public float interval = 1;
 	public int minSpawnMargin = 2;
 	public int maxSpawnMargin = 7;
@@ -83,7 +83,7 @@ public class PedestrianSpawnerScript : MonoBehaviour {
 		foreach (int y in Enumerable.Range(0, outerBoundsInt.size.y).OrderBy(y => Random.value)) {
 			foreach (int x in Enumerable.Range(0, outerBoundsInt.size.x).OrderBy(x => Random.value)) {
 				// Only use tiles that are within the margin but not visible to the camera.
-				if (carCount < targetCarCount &&
+				if (carCount < targetCount &&
 					(x < marginWidth || y < marginWidth || x >= farMarginX || y >= farMarginY)) {
 					TileBase tile = tiles[y * outerBoundsInt.size.x + x];
 					Vector3 point = pedestrians.CellToWorld(
