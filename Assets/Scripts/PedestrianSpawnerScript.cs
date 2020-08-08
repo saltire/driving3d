@@ -77,25 +77,32 @@ public class PedestrianSpawnerScript : MonoBehaviour {
 		int farMarginX = outerBoundsInt.size.x - marginWidth;
 		int farMarginY = outerBoundsInt.size.y - marginWidth;
 
-		int carCount = Physics2D.OverlapAreaAll(
+		int pedCount = Physics2D.OverlapAreaAll(
 			(Vector3)outerBoundsInt.min, (Vector3)outerBoundsInt.max, layerMask).Length;
 
 		foreach (int y in Enumerable.Range(0, outerBoundsInt.size.y).OrderBy(y => Random.value)) {
 			foreach (int x in Enumerable.Range(0, outerBoundsInt.size.x).OrderBy(x => Random.value)) {
 				// Only use tiles that are within the margin but not visible to the camera.
-				if (carCount < targetCount &&
+				if (pedCount < targetCount &&
 					(x < marginWidth || y < marginWidth || x >= farMarginX || y >= farMarginY)) {
 					TileBase tile = tiles[y * outerBoundsInt.size.x + x];
-					Vector3 point = pedestrians.CellToWorld(
-						new Vector3Int(outerBoundsInt.xMin + x, outerBoundsInt.yMin + y, 0)) + halfCell;
-					int dir = tile == null ? -1 : dirs.IndexOf(tile.name);
 
-					if (dir > -1 && Physics2D.OverlapCircle(point, clearRadius, layerMask) == null) {
-						PedestrianScript pedestrian = pedestrianPrefabs[Random.Range(0, pedestrianPrefabs.Length)];
-						Instantiate(pedestrian, point + new Vector3(0, 0, pedestrian.transform.position.z),
-							Quaternion.Euler(0, 0, 0 * dir), transform);
+					if (tile != null) {
+						string[] tileDirs = tile.name.Split(',').Select(d => d.Replace("!", "")).ToArray();
+						int dir = dirs.IndexOf(tileDirs[Random.Range(0, tileDirs.Length)]);
 
-						carCount += 1;
+						if (dir > -1) {
+							Vector3 point = pedestrians.CellToWorld(
+								new Vector3Int(outerBoundsInt.xMin + x, outerBoundsInt.yMin + y, 0)) + halfCell;
+
+							if (Physics2D.OverlapCircle(point, clearRadius, layerMask) == null) {
+								PedestrianScript pedestrian = pedestrianPrefabs[Random.Range(0, pedestrianPrefabs.Length)];
+								Instantiate(pedestrian, point + new Vector3(0, 0, pedestrian.transform.position.z),
+									Quaternion.Euler(0, 0, 0 * dir), transform);
+
+								pedCount += 1;
+							}
+						}
 					}
 				}
 			}

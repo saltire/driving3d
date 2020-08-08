@@ -1,5 +1,6 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 using UnityEngine.Tilemaps;
 
@@ -19,7 +20,6 @@ public class PedestrianAIScript : MonoBehaviour {
 	Rigidbody2D body;
 	LayerMask pedestrianMask;
 	string lastDir;
-	bool lastDirWasTurn;
 
 	Dictionary<string, Vector3> dirVectors = new Dictionary<string, Vector3>() {
 		{ "north", Vector3.up },
@@ -51,12 +51,12 @@ public class PedestrianAIScript : MonoBehaviour {
         {
             thisRenderer.flipX = false;
         }
- 
+
         if (transform.position.x < oldPosition) // he's looking left
         {
             thisRenderer.flipX = true;
         }
-        oldPosition = transform.position.x; // update the variable with the new position so we can chack against it next frame		
+        oldPosition = transform.position.x; // update the variable with the new position so we can check against it next frame
 	}
 
 	public void GetWalkingActions() {
@@ -76,7 +76,7 @@ public class PedestrianAIScript : MonoBehaviour {
 		Vector3 front = transform.position;
 		RaycastHit2D hit = Physics2D.Linecast(front, goal, pedestrianMask);
 
-		
+
 		transform.position = Vector2.MoveTowards(new Vector2(transform.position.x, transform.position.y), goal, moveSpeed * Time.deltaTime);
 	}
 
@@ -85,24 +85,32 @@ public class PedestrianAIScript : MonoBehaviour {
 		if (currentTile == null || currentTile.name == null) {
 			return currentCell;
 		}
-		string[] dirs = currentTile.name.Split(',');
 
 		// Pick a direction at random from the dirs available on this tile.
-		// Avoid taking two turns in a row if possible.
-		// If a dir has a ! after it, it can only be taken if it matches the last dir.
-		string dir;
-		bool mustMatch;
-		do {
-			dir = dirs[Random.Range(0, dirs.Length)];
-			mustMatch = dir.Contains("!");
-			if (mustMatch) {
-				dir = dir.Remove(dir.Length - 1);
-			}
-		}
-		while ((dirs.Length > 1 && lastDirWasTurn && dir != lastDir) ||
-			(mustMatch && dir != lastDir));
+		string[] dirs = currentTile.name.Split(',');
 
-		lastDirWasTurn = lastDir != dir;
+		// If a dir has a ! after it, it can only be taken if it matches the last dir.
+		string[] validDirs = dirs
+			.Where(d => !d.EndsWith("!") || lastDir == null || d.StartsWith(lastDir))
+			.ToArray();
+
+		if (validDirs.Length == 0) {
+			Util.Log("No valid directions for", currentTile.name, "from", lastDir);
+			return currentCell;
+		}
+
+		// Avoid doubling back if possible.
+		string[] validDirsNoDoubleBack = validDirs
+			// Opposite vectors have a dot product of -1.
+			.Where(d => lastDir == null || Vector3.Dot(dirVectors[d], dirVectors[lastDir]) > -1)
+			.ToArray();
+
+		string[] availableDirs = (validDirsNoDoubleBack.Length > 0 ? validDirsNoDoubleBack : validDirs)
+			.Select(d => d.Replace("!", ""))
+			.ToArray();
+
+		string dir = availableDirs[Random.Range(0, availableDirs.Length)];
+
 		lastDir = dir;
 		return currentCell + dirVectors[dir];
 	}

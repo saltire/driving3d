@@ -86,10 +86,9 @@ public class DrivingAIScript : MonoBehaviour {
 		}
 
 		// Pick a direction at random from the dirs available on this tile.
-		// Avoid taking two turns in a row if possible.
-		// If a dir has a ! after it, it can only be taken if it matches the last dir.
 		string[] dirs = currentTile.name.Split(',');
 
+		// If a dir has a ! after it, it can only be taken if it matches the last dir.
 		string[] validDirs = dirs
 			.Where(d => !d.EndsWith("!") || lastDir == null || d.StartsWith(lastDir))
 			.ToArray();
@@ -99,6 +98,7 @@ public class DrivingAIScript : MonoBehaviour {
 			return currentCell;
 		}
 
+		// Avoid taking two turns in a row if possible.
 		string[] validDirsNoDoubleTurn = validDirs
 			.Where(d => !lastDirWasTurn || lastDir == null || d.StartsWith(lastDir))
 			.ToArray();
