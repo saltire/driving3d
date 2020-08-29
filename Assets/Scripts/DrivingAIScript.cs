@@ -1,5 +1,6 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 using UnityEngine.Tilemaps;
 
@@ -83,24 +84,32 @@ public class DrivingAIScript : MonoBehaviour {
 		if (currentTile == null || currentTile.name == null) {
 			return currentCell;
 		}
-		string[] dirs = currentTile.name.Split(',');
 
 		// Pick a direction at random from the dirs available on this tile.
 		// Avoid taking two turns in a row if possible.
 		// If a dir has a ! after it, it can only be taken if it matches the last dir.
-		string dir;
-		bool mustMatch;
-		do {
-			dir = dirs[Random.Range(0, dirs.Length)];
-			mustMatch = dir.Contains("!");
-			if (mustMatch) {
-				dir = dir.Remove(dir.Length - 1);
-			}
-		}
-		while ((dirs.Length > 1 && lastDirWasTurn && dir != lastDir) ||
-			(mustMatch && dir != lastDir));
+		string[] dirs = currentTile.name.Split(',');
 
-		lastDirWasTurn = lastDir != dir;
+		string[] validDirs = dirs
+			.Where(d => !d.EndsWith("!") || lastDir == null || d.StartsWith(lastDir))
+			.ToArray();
+
+		if (validDirs.Length == 0) {
+			Util.Log("No valid directions for", currentTile.name, "from", lastDir);
+			return currentCell;
+		}
+
+		string[] validDirsNoDoubleTurn = validDirs
+			.Where(d => !lastDirWasTurn || lastDir == null || d.StartsWith(lastDir))
+			.ToArray();
+
+		string[] availableDirs = (validDirsNoDoubleTurn.Length > 0 ? validDirsNoDoubleTurn : validDirs)
+			.Select(d => d.Replace("!", ""))
+			.ToArray();
+
+		string dir = availableDirs[Random.Range(0, availableDirs.Length)];
+
+		lastDirWasTurn = lastDir != null && lastDir != dir;
 		lastDir = dir;
 		return currentCell + dirVectors[dir];
 	}
