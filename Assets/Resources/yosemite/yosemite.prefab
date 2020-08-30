@@ -55,6 +55,7 @@ SpriteRenderer:
   m_LightProbeUsage: 1
   m_ReflectionProbeUsage: 1
   m_RayTracingMode: 0
+  m_RayTraceProcedural: 0
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
@@ -159,8 +160,6 @@ MonoBehaviour:
   engineRev: 20
   frontWheelOffset: {fileID: 7865917526826897054}
   backWheelOffset: {fileID: 8196115693528444129}
-  wheelXoff: 9.5
-  wheelYoff: 14
   maxWheelAngle: 35
   wheelAngleVelocity: 5
   wheelMotorSpeed: 200

@@ -42512,17 +42512,6 @@ MonoBehaviour:
   minSpawnMargin: 1
   maxSpawnMargin: 5
   clearRadius: 3
-  carPrefabs:
-  - {fileID: 6915230503914431021, guid: c72a5de33c39c9f459ed2f67e161555a, type: 3}
-  - {fileID: 5878621191331715480, guid: a8eda9573be4ae74c97fc143808e1033, type: 3}
-  - {fileID: 6078270309045163552, guid: 7a3511f6e53a07448913504ed59d95cb, type: 3}
-  - {fileID: 1931801391139951978, guid: d7d24d7fd925b394d9fc8e435291a633, type: 3}
-  - {fileID: 9062954572356711681, guid: b0a63d890cdf06e4d92ff62b01c7676a, type: 3}
-  - {fileID: 728814667469725322, guid: e5d8b1d631c41574f87f492959ded6c5, type: 3}
-  - {fileID: 2266650374032962712, guid: 2f7ce4a5b601eb848965b23b669b273e, type: 3}
-  - {fileID: 3364252592943918505, guid: ad1f365ebefa57d4c80d816d50b191d4, type: 3}
-  - {fileID: 492615258520790134, guid: 0d750d9b98a75a24981938e70b897404, type: 3}
-  - {fileID: 3472803914633490271, guid: a464618536041a449a3e804a3a9c174e, type: 3}
 --- !u!4 &1895003194
 Transform:
   m_ObjectHideFlags: 0

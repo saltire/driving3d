@@ -9,7 +9,8 @@ public class CarSpawnerScript : MonoBehaviour {
 	public int minSpawnMargin = 2;
 	public int maxSpawnMargin = 7;
 	public float clearRadius = 3;
-	public DrivingScript[] carPrefabs;
+
+	DrivingScript[] carPrefabs;
 
 	Vector3 halfCell = new Vector3(0.5f, 0.5f, 0);
 	List<string> dirs = new List<string>(new string[] { "north", "west", "south", "east" });
@@ -26,6 +27,8 @@ public class CarSpawnerScript : MonoBehaviour {
 		layerMask = LayerMask.GetMask("Cars");
 
 		margin = new Vector3(maxSpawnMargin, maxSpawnMargin, 0);
+
+		carPrefabs = Resources.LoadAll<DrivingScript>("/");
 
 		SpawnPlayer();
 
