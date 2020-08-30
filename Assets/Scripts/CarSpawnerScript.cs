@@ -15,7 +15,6 @@ public class CarSpawnerScript : MonoBehaviour {
 	List<string> dirs = new List<string>(new string[] { "north", "west", "south", "east" });
 
 	Camera cam;
-	float height;
 	Tilemap traffic;
 	int layerMask;
 	Vector3 margin;
@@ -23,7 +22,6 @@ public class CarSpawnerScript : MonoBehaviour {
 
 	void Start() {
 		cam = Camera.main;
-		height = cam.GetComponent<CameraFollowScript>().height;
 		traffic = GameObject.Find("Traffic").GetComponent<Tilemap>();
 		layerMask = LayerMask.GetMask("Cars");
 
@@ -48,8 +46,8 @@ public class CarSpawnerScript : MonoBehaviour {
 	}
 
 	BoundsInt GetOuterCellBounds() {
-		Vector3 cameraMin = cam.ViewportToWorldPoint(new Vector3(0, 0, height));
-		Vector3 cameraMax = cam.ViewportToWorldPoint(new Vector3(1, 1, height));
+		Vector3 cameraMin = cam.ViewportToWorldPoint(new Vector3(0, 0, 0));
+		Vector3 cameraMax = cam.ViewportToWorldPoint(new Vector3(1, 1, 0));
 
 		BoundsInt outerBoundsInt = new BoundsInt();
 		outerBoundsInt.SetMinMax(

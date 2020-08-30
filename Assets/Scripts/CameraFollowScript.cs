@@ -4,45 +4,67 @@ using System.Collections.Generic;
 using UnityEngine;
 
 public class CameraFollowScript : MonoBehaviour {
-	public float height = 10;
 	public float lead = 32;
-	public float speed = 0.05f;
+	public float cameraLag = 0.05f;
 	public float maxLeadDistance = 5;
+	public float maxZoomOut = 1.5f;
 
-	Transform target;
-	Vector3 heightDistance;
-	Vector3 lastTargetPosition;
+	Transform car;
+	Vector3 lastCarPosition;
+	float initialSize;
+	Vector3 distanceVector;
+
+	Camera captureCamera;
+	public Camera perspectiveCamera;
 
 	void Awake() {
-		heightDistance = Vector3.back * height;
-
 		DrivingScript[] cars = Component.FindObjectsOfType<DrivingScript>();
 		DrivingScript playerCar = Array.Find<DrivingScript>(cars, c => c.playerControlled);
 		if (playerCar) {
 			SetPlayerCar(playerCar);
 		}
+
+		captureCamera = GetComponent<Camera>();
+		initialSize = captureCamera.orthographicSize;
+		distanceVector = Vector3.forward * transform.position.z;
 	}
 
 	public void SetPlayerCar(DrivingScript playerCar) {
-		target = playerCar.transform;
-		transform.position = target.position + heightDistance;
-		lastTargetPosition = target.position;
+		car = playerCar.transform;
+		transform.position = car.position + distanceVector;
+		lastCarPosition = car.position;
+	}
+
+	void SetPerspectiveCameraDistance() {
+		float distance = captureCamera.orthographicSize /
+			Mathf.Tan(perspectiveCamera.fieldOfView * 0.5f * Mathf.Deg2Rad);
+		perspectiveCamera.transform.position = new Vector3(
+			perspectiveCamera.transform.position.x, perspectiveCamera.transform.position.y, -distance);
+	}
+
+	void SetPerspectiveCameraFOV() {
+		perspectiveCamera.fieldOfView = 2.0f *
+			Mathf.Atan(captureCamera.orthographicSize / -perspectiveCamera.transform.position.z) *
+			Mathf.Rad2Deg;
 	}
 
 	void FixedUpdate() {
-		if (target) {
-			Vector3 leadDistance = (target.position - lastTargetPosition) * lead;
-			// Confine camera distance to a circle.
-			if (leadDistance.magnitude > maxLeadDistance) {
-				float scale = maxLeadDistance / leadDistance.magnitude;
-				leadDistance = Vector3.Scale(leadDistance, new Vector3(scale, scale, 0));
-			}
-			// Confine camera distance to a box.
-			// leadDistance = Vector3.Min(leadDistance, new Vector3(maxLeadDistance, maxLeadDistance, 0));
+		if (car) {
+			Vector3 leadVector = Vector3.ClampMagnitude(
+				(car.position - lastCarPosition) * lead, maxLeadDistance);
 
-			transform.position = Vector3.Lerp(transform.position,
-				target.position + leadDistance + heightDistance, speed);
-			lastTargetPosition = target.position;
+			Vector3 targetPosition = car.position + leadVector + distanceVector;
+			transform.position = Vector3.Lerp(transform.position, targetPosition, cameraLag);
+
+			float targetSize = initialSize *
+				Mathf.Lerp(1, maxZoomOut, leadVector.magnitude / maxLeadDistance);
+			captureCamera.orthographicSize = Mathf.Lerp(captureCamera.orthographicSize, targetSize,
+				cameraLag);
+
+			// SetPerspectiveCameraDistance();
+			SetPerspectiveCameraFOV();
+
+			lastCarPosition = car.position;
 		}
 	}
 }
