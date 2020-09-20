@@ -4,11 +4,6 @@ using System.Linq;
 using UnityEngine;
 using UnityEngine.Tilemaps;
 
-public struct DrivingActions {
-	public float acc;
-	public float steer;
-}
-
 public class DrivingAIScript : MonoBehaviour {
 	public float accAmount = 0.2f;
 	public float lookAhead = 0.4f;
@@ -74,8 +69,8 @@ public class DrivingAIScript : MonoBehaviour {
 			Mathf.Max(0, ((forwardVelocity.magnitude - MinTurnBrakingSpeed) / MinTurnBrakingSpeed)));
 
 		return new DrivingActions() {
-			acc = hit ? 0 : accAmount * (1 - brake),
 			steer = steer,
+			acc = hit ? 0 : accAmount * (1 - brake),
 		};
 	}
 

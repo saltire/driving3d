@@ -2,6 +2,12 @@
 using System.Collections.Generic;
 using UnityEngine;
 
+public struct DrivingActions {
+	public float steer;
+	public float acc;
+	public float brake;
+}
+
 public class DrivingScript : MonoBehaviour {
 	public bool playerControlled = false;
 	public bool frontWheelDrive = false;
@@ -43,6 +49,7 @@ public class DrivingScript : MonoBehaviour {
 	float steerDir = 0;                    // the angle the wheels should be at
 	Rigidbody2D body;
 	DrivingAIScript ai;
+	InputScript input;
 
 	void Start() {
 		ConfigScript config = (ConfigScript)Object.FindObjectOfType(typeof(ConfigScript));
@@ -60,6 +67,7 @@ public class DrivingScript : MonoBehaviour {
 
 		body = GetComponent<Rigidbody2D>();
 		ai = GetComponent<DrivingAIScript>();
+		input = FindObjectOfType<InputScript>();
 	}
 
 	Wheel AddWheel(float xoff, float yoff, bool powered, bool rotatable, bool handbrake) {
@@ -93,9 +101,10 @@ public class DrivingScript : MonoBehaviour {
 		float brake = 0;
 
 		if (playerControlled) {
-			acc = Input.GetAxisRaw("Vertical");     // up: 1, down: -1
-			steer = Input.GetAxisRaw("Horizontal"); // left: -1, right: 1
-			brake = Input.GetAxisRaw("Handbrake");
+			DrivingActions actions = input.GetDrivingActions();
+			acc = actions.acc;
+			steer = actions.steer;
+			brake = actions.brake;
 		}
 		else if (ai != null) {
 			DrivingActions actions = ai.GetDrivingActions();
