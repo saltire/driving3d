@@ -4,11 +4,6 @@ using System.Linq;
 using UnityEngine;
 using UnityEngine.Tilemaps;
 
-public struct DrivingActions {
-	public float acc;
-	public float steer;
-}
-
 public class DrivingAIScript : MonoBehaviour {
 	public float accAmount = 0.2f;
 	public float lookAhead = 0.4f;
@@ -64,18 +59,18 @@ public class DrivingAIScript : MonoBehaviour {
 		// Debug.DrawLine(frontAxle, goal, Color.red, Time.deltaTime);
 
 		float thisAngleDiff = Vector3.SignedAngle(transform.up, goalDist, -transform.forward);
-		float steer = Mathf.Clamp(thisAngleDiff / driving.maxWheelAngle, -1, 1);
+		float steer1d = Mathf.Clamp(thisAngleDiff / driving.maxWheelAngle, -1, 1);
 
 		Vector3 front = transform.position + transform.up * frontDist;
 		RaycastHit2D hit = Physics2D.Linecast(front, goal, carMask);
 
 		Vector3 forwardVelocity = Vector3.Project(body.velocity, transform.up);
-		float brake = Mathf.Abs(steer * turnBraking *
+		float brake = Mathf.Abs(steer1d * turnBraking *
 			Mathf.Max(0, ((forwardVelocity.magnitude - MinTurnBrakingSpeed) / MinTurnBrakingSpeed)));
 
 		return new DrivingActions() {
+			steer1d = steer1d,
 			acc = hit ? 0 : accAmount * (1 - brake),
-			steer = steer,
 		};
 	}
 

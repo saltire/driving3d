@@ -18,10 +18,6 @@ public class CopLightsScript : MonoBehaviour {
 	}
 
 	void Update() {
-		if (driving.playerControlled && Input.GetButtonDown("Cop lights")) {
-			setLights(!lit);
-		}
-
 		if (lit) {
 			foreach (Transform light in transform) {
 				light.Rotate(new Vector3(speed, 0, 0));
@@ -37,5 +33,9 @@ public class CopLightsScript : MonoBehaviour {
 		foreach (Transform light in transform) {
 			light.gameObject.SetActive(lit);
 		}
+	}
+
+	public void ToggleCopLights() {
+		setLights(!lit);
 	}
 }

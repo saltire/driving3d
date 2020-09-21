@@ -33,11 +33,9 @@ public class HeadlightsScript : MonoBehaviour {
 		return headlight;
 	}
 
-	void Update() {
-		if (driving.playerControlled && Input.GetButtonDown("Headlights")) {
-			foreach (GameObject light in headlights) {
-				light.SetActive(!light.activeSelf);
-			}
+	public void ToggleHeadlights() {
+		foreach (GameObject light in headlights) {
+			light.SetActive(!light.activeSelf);
 		}
 	}
 }
