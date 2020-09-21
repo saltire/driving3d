@@ -9,6 +9,7 @@ public class CarSpawnerScript : MonoBehaviour {
 	public int minSpawnMargin = 2;
 	public int maxSpawnMargin = 7;
 	public float clearRadius = 3;
+	public DrivingScript playerCarPrefab;
 
 	DrivingScript[] carPrefabs;
 
@@ -67,12 +68,14 @@ public class CarSpawnerScript : MonoBehaviour {
 	}
 
   void SpawnPlayer() {
-    DrivingScript carPrefab = carPrefabs[Random.Range(0, carPrefabs.Length)];
+    DrivingScript carPrefab = playerCarPrefab != null ? playerCarPrefab :
+			carPrefabs[Random.Range(0, carPrefabs.Length)];
     DrivingScript playerCar = Instantiate(carPrefab,
       transform.position + new Vector3(0, 0, carPrefab.transform.position.z), transform.rotation);
 
     playerCar.playerControlled = true;
 		FindObjectOfType<CameraFollowScript>().SetPlayerCar(playerCar);
+		FindObjectOfType<InputScript>().SetPlayerCar(playerCar);
   }
 
 	void SpawnCars(BoundsInt outerBoundsInt) {

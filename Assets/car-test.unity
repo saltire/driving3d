@@ -42586,6 +42586,38 @@ MonoBehaviour:
         m_CallState: 2
     m_ActionId: 688abfab-911e-457e-a1a3-9b620d84618c
     m_ActionName: Player/Accelerate/Brake[/Keyboard/downArrow,/Keyboard/upArrow]
+  - m_PersistentCalls:
+      m_Calls:
+      - m_Target: {fileID: 1886448897}
+        m_TargetAssemblyTypeName: InputScript, Assembly-CSharp
+        m_MethodName: OnHeadlights
+        m_Mode: 0
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
+    m_ActionId: a26464a0-f881-4560-add2-bb7de4beb587
+    m_ActionName: Player/Headlights[/Keyboard/h,/XInputControllerWindows/leftShoulder]
+  - m_PersistentCalls:
+      m_Calls:
+      - m_Target: {fileID: 1886448897}
+        m_TargetAssemblyTypeName: InputScript, Assembly-CSharp
+        m_MethodName: OnCopLights
+        m_Mode: 0
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
+    m_ActionId: cacbb553-8d23-4875-960a-26e869083cfb
+    m_ActionName: Player/Cop lights[/Keyboard/c,/XInputControllerWindows/rightShoulder]
   m_NeverAutoSwitchControlSchemes: 0
   m_DefaultControlScheme: 
   m_DefaultActionMap: Player
@@ -42651,6 +42683,7 @@ MonoBehaviour:
   minSpawnMargin: 1
   maxSpawnMargin: 5
   clearRadius: 3
+  playerCarPrefab: {fileID: 0}
 --- !u!4 &1895003194
 Transform:
   m_ObjectHideFlags: 0
