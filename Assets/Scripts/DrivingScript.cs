@@ -3,7 +3,8 @@ using System.Collections.Generic;
 using UnityEngine;
 
 public struct DrivingActions {
-	public float steer;
+	public float steer1d;
+	public Vector2 steer2d;
 	public float acc;
 	public float brake;
 }
@@ -31,7 +32,7 @@ public class DrivingScript : MonoBehaviour {
 	public float steerTorque = 15;         // extra torque on the car when turning (multiplied by speed)
 	public float maxSteerTorque = 25;      // max amount of extra steering torque
 	public float brakeTorque = 8;          // extra torque when handbraking
-	public float torqueDamp = 0.1f;       // how quickly the car will straighten when not turning
+	public float torqueDamp = 0.1f;        // how quickly the car will straighten when not turning
 
 	public float driftControl = 0.5f;      // drift control, usually between (0-1) but can be higher
 
@@ -46,7 +47,7 @@ public class DrivingScript : MonoBehaviour {
 
 	Wheel[] wheels;
 	float ppu;
-	float steerDir = 0;                    // the angle the wheels should be at
+	float wheelAngle = 0;                    // the angle the wheels should be at
 	Rigidbody2D body;
 	DrivingAIScript ai;
 	InputScript input;
@@ -96,20 +97,22 @@ public class DrivingScript : MonoBehaviour {
 	}
 
 	void FixedUpdate() {
+		float steer1d = 0;
+		Vector2 steer2d = Vector2.zero;
 		float acc = 0;
-		float steer = 0;
 		float brake = 0;
 
 		if (playerControlled) {
 			DrivingActions actions = input.GetDrivingActions();
+			steer1d = actions.steer1d;
+			steer2d = actions.steer2d;
 			acc = actions.acc;
-			steer = actions.steer;
 			brake = actions.brake;
 		}
 		else if (ai != null) {
 			DrivingActions actions = ai.GetDrivingActions();
+			steer1d = actions.steer1d;
 			acc = actions.acc;
-			steer = actions.steer;
 		}
 
 		bool movingForward = Vector2.Dot(body.velocity, transform.up) > 0;
@@ -123,7 +126,15 @@ public class DrivingScript : MonoBehaviour {
 			engine = (movingForward ? engineBrk : engineRev) * acc;
 		}
 
-		steerDir += Mathf.Clamp((steer * maxWheelAngle) - steerDir,
+		// get the desired wheel angle and the closest angle we can get to it in one frame
+		float targetWheelAngle = steer1d * maxWheelAngle;
+		if (steer2d.magnitude > 0) {
+			float vehicleAngleDiff = Vector2.SignedAngle(steer2d, transform.up * Mathf.Sign(acc));
+			targetWheelAngle = Mathf.Clamp(vehicleAngleDiff, -maxWheelAngle, maxWheelAngle) *
+				Mathf.Sign(acc);
+			steer1d = targetWheelAngle / maxWheelAngle;
+		}
+		wheelAngle += Mathf.Clamp(targetWheelAngle - wheelAngle,
 			-wheelAngleVelocity, wheelAngleVelocity);
 
 		foreach (Wheel wheel in wheels) {
@@ -131,8 +142,7 @@ public class DrivingScript : MonoBehaviour {
 
 			// set the rotation(angle) for the rotatable wheels
 			if (wheel.rotatable) {
-				float currentAngle = GetCurrentAngle(wheel.obj.transform);
-				float angleDiff = steerDir - currentAngle;
+				float angleDiff = wheelAngle - GetCurrentAngle(wheel.obj.transform);
 
 				HingeJoint2D joint = wheel.obj.GetComponent<HingeJoint2D>();
 				JointMotor2D motor = joint.motor;
@@ -144,7 +154,7 @@ public class DrivingScript : MonoBehaviour {
 					motor.motorSpeed = 0;
 					joint.motor = motor;
 				}
-				// wheel.transform.Rotate(new Vector3(0, 0, currentAngle - steerDir));
+				// wheel.transform.Rotate(new Vector3(0, 0, currentAngle - wheelAngle));
 
 				// prevent random wheel joint physics
 				wheelBody.angularVelocity = 0;
@@ -177,7 +187,7 @@ public class DrivingScript : MonoBehaviour {
 		KillSidewaysSpeed(gameObject);
 
 		// add extra torque when steering, to make up for angular drag
-		float torque = (movingForward ? -1 : 1) * steer *
+		float torque = (movingForward ? -1 : 1) * steer1d *
 			(Mathf.Min(steerTorque * body.velocity.magnitude, maxSteerTorque) +
 			(brake * brakeTorque * body.velocity.magnitude));
 		body.AddTorque(torque);
@@ -188,7 +198,7 @@ public class DrivingScript : MonoBehaviour {
 		}
 
 		// angular friction when not steering
-		if (steerDir == 0) {
+		if (wheelAngle == 0) {
 			body.angularVelocity -= Mathf.Sign(body.angularVelocity) * torqueDamp;
 		}
 

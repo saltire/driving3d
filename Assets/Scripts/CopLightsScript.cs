@@ -18,9 +18,9 @@ public class CopLightsScript : MonoBehaviour {
 	}
 
 	void Update() {
-		if (driving.playerControlled && Input.GetButtonDown("Cop lights")) {
-			setLights(!lit);
-		}
+		// if (driving.playerControlled && Input.GetButtonDown("Cop lights")) {
+		// 	setLights(!lit);
+		// }
 
 		if (lit) {
 			foreach (Transform light in transform) {
